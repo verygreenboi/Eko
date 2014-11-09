@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.0"
+
+    defaultConfig {
+        applicationId "ng.codehaven.eko"
+        minSdkVersion 10
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:21.0.0'
+    compile 'com.mcxiaoke.volley:library:1.0.7'
+
+    // Butterknife Injection
+    compile 'com.jakewharton:butterknife:5.1.1'
+
+    // For floating hints text in Edit text
+    compile 'com.wrapp.floatlabelededittext:library:0.0.5'
+    // Saripaar for form validation
+    compile 'com.mobsandgeeks:android-saripaar:1.0.2'
+
+    compile 'info.hoang8f:fbutton:1.0.5'
+    // Supports Android 4.0.3 and later (API level 15)
+    compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
+
+    // Supports Android 2.1 and later (API level 7), but not optimal for later Android versions.
+    // If you only plan on supporting Android 4.0.3 and up, you don't need to include this.
+    compile 'com.embarkmobile:zxing-android-legacy:2.0.0@aar'
+}
