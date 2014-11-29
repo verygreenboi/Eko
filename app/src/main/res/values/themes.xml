@@ -1,8 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="eko_theme" parent="AppTheme">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="eko_theme" parent="Theme.AppCompat.Light.NoActionBar">
 
+        <item name="android:background">@color/background_material_light</item>
+
+        <item name="android:editTextStyle">@style/EditTexteko_theme</item>
+
+        <item name="android:textColorHighlight">#99009688</item>
+
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextVieweko_theme</item>
+
+        <item name="android:checkboxStyle">@style/CheckBoxeko_theme</item>
+
+        <item name="android:radioButtonStyle">@style/RadioButtoneko_theme</item>
+
+        <item name="android:buttonStyle">@style/Buttoneko_theme</item>
+
+        <item name="android:imageButtonStyle">@style/ImageButtoneko_theme</item>
+
+        <item name="android:spinnerStyle">@style/Spinnereko_theme</item>
+
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemeko_theme</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBareko_theme</item>
+
+        <item name="android:seekBarStyle">@style/SeekBareko_theme</item>
+
+        <item name="android:buttonStyleToggle">@style/Toggleeko_theme</item>
+
+        <item name="android:listViewStyle">@style/ListVieweko_theme</item>
+
+        <item name="android:listViewWhiteStyle">@style/ListVieweko_theme.White</item>
+
+        <item name="android:spinnerItemStyle">@style/SpinnerItemeko_theme</item>
+
+        <item name="photoItemForeground">?android:selectableItemBackground</item>
+        <item name="photoItemForegroundBorderless">?android:selectableItemBackground</item>
+
+    </style>
+
+    <style name="activityStyle" parent="eko_theme">
+        <item name="windowActionBar">false</item>
+        <item name="toolbarStyle">@style/homeToolbarStyle</item>
+        <item name="android:textColor">@color/primary_text_default_material_light</item>
+    </style>
+
+    <style name="homeActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="requestFundsActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:buttonStyle">@style/Buttoneko_theme</item>
+    </style>
+
+    <style name="cashInActivity" parent="activityStyle">
+        <item name="android:editTextStyle">@style/EditTexteko_theme_Light</item>
+        <item name="android:textColorHint">@color/secondary_text_default_material_light</item>
+    </style>
+
+    <style name="settingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:editTextStyle">@style/EditTexteko_theme_Light</item>
+        <item name="android:textColorHint">@color/secondary_text_default_material_light</item>
+    </style>
+
+    <style name="introActivity" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+
+    <style name="regActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:editTextStyle">@style/EditTexteko_theme</item>
+        <item name="android:buttonStyle">@style/Buttoneko_theme</item>
+        <item name="android:checkboxStyle">@style/CheckBoxeko_theme</item>
+        <item name="android:textColorHighlight">#99009688</item>
     </style>
 
 </resources>

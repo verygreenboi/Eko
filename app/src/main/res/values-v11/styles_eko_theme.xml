@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="AutoCompleteTextVieweko_theme" parent="android:Widget.Holo.AutoCompleteTextView">
+      <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+	    <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
+  </style>
+
+  <style name="Buttoneko_theme" parent="android:Widget.Holo.Button">
+	  <item name="android:background">@drawable/eko_theme_btn_default_holo_dark</item>
+  </style>
+
+  <style name="ImageButtoneko_theme" parent="android:Widget.Holo.ImageButton">
+	  <item name="android:background">@drawable/eko_theme_btn_default_holo_dark</item>
+  </style>
+
+  <style name="Spinnereko_theme" parent="android:Widget.Holo.Spinner">
+      <item name="android:background">@drawable/eko_theme_spinner_background_holo_dark</item>
+      <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+  </style>
+
+  <style name="ProgressBareko_theme" parent="android:Widget.Holo.ProgressBar.Horizontal">
+      <item name="android:progressDrawable">@drawable/eko_theme_progress_horizontal_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/eko_theme_progress_indeterminate_horizontal_holo_dark</item>
+  </style>
+
+  <style name="SeekBareko_theme" parent="android:Widget.Holo.SeekBar">
+      <item name="android:progressDrawable">@drawable/eko_theme_scrubber_progress_horizontal_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/eko_theme_scrubber_progress_horizontal_holo_dark</item>
+      <item name="android:thumb">@drawable/eko_theme_scrubber_control_selector_holo_dark</item>
+  </style>
+
+  <style name="Toggleeko_theme" parent="android:Widget.Holo.Button.Toggle">
+      <item name="android:background">@drawable/eko_theme_btn_toggle_holo_dark</item>
+  </style>
+
+</resources>

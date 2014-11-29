@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingTop="48dp"
+    tools:context="ng.codehaven.eko.ui.fragments.IntroAFragment">
+
+
+    <ng.codehaven.eko.ui.views.CustomTextView
+        android:id="@+id/introTitle"
+        style="@style/titleLargeTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/intro_b_title_txt"/>
+
+    <ng.codehaven.eko.ui.views.CustomTextView
+        android:id="@+id/body"
+        android:layout_below="@+id/introTitle"
+        style="@style/bodyTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/intro_b_body_txt"/>
+
+
+
+</RelativeLayout>

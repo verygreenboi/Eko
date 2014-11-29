@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navdrawer"
+    android:layout_width="@dimen/navdrawer_width"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/background_material_light"
+    android:fitsSystemWindows="true"
+    app:insetForeground="#4000">
+
+    <ImageView
+        android:id="@+id/coverImageView"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/coverImage"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_cover" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:minHeight="140dp"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <ng.codehaven.eko.ui.widgets.BezelImageView
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/navdrawer_profile_image_size"
+                android:layout_height="@dimen/navdrawer_profile_image_size"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/person_image_empty"
+                app:maskDrawable="@drawable/circle_mask" />
+
+            <ng.codehaven.eko.ui.views.CustomTextView
+                android:id="@+id/profile_name_text"
+                style="@style/bodyTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingTop="16dp"
+                android:singleLine="true"
+                android:text="@string/app_name" />
+
+            <ng.codehaven.eko.ui.views.CustomTextView
+                android:id="@+id/profile_email"
+                style="@style/bodyTextViewStyle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email_hint_txt" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <!-- Drawer items -->
+    <ListView
+        android:id="@+id/navdrawer_items_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/coverImageView"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:divider="@null"
+        android:orientation="vertical" />
+
+
+</RelativeLayout>

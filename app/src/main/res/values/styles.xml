@@ -1,12 +1,148 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="EditTexteko_theme" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
+        <item name="android:textColor">#ffffff</item>
     </style>
 
-    <style name="homeActivity" parent="eko_theme">
+    <style name="EditTexteko_theme_Light" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
+        <item name="android:textColor">@color/primary_text_default_material_light</item>
+    </style>
 
+    <style name="AutoCompleteTextVieweko_theme" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+        <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="CheckBoxeko_theme" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/eko_theme_btn_check_holo_dark</item>
+    </style>
+
+    <style name="RadioButtoneko_theme" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/eko_theme_btn_radio_holo_dark</item>
+    </style>
+
+    <style name="Buttoneko_theme" parent="android:Widget.Button">
+        <item name="android:background">@drawable/eko_theme_btn_default_holo_dark</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="ImageButtoneko_theme" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/eko_theme_btn_default_holo_dark</item>
+    </style>
+
+    <style name="Spinnereko_theme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/eko_theme_spinner_background_holo_dark</item>
+        <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+    </style>
+
+    <style name="SpinnerDropDownItemeko_theme" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/eko_theme_btn_radio_holo_dark</item>
+    </style>
+
+    <style name="ProgressBareko_theme" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">
+            @drawable/eko_theme_progress_horizontal_holo_dark
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/eko_theme_progress_indeterminate_horizontal_holo_dark
+        </item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="SeekBareko_theme" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">
+            @drawable/eko_theme_scrubber_progress_horizontal_holo_dark
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/eko_theme_scrubber_progress_horizontal_holo_dark
+        </item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/eko_theme_scrubber_control_selector_holo_dark
+        </item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
+
+    <style name="Toggleeko_theme" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/eko_theme_btn_toggle_holo_dark</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="ListVieweko_theme" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+    </style>
+
+    <style name="ListVieweko_theme.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+    </style>
+
+    <style name="SpinnerItemeko_theme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="homeToolbarStyle" parent="Theme.AppCompat">
+        <!-- android:textColorPrimary is the  color of the title text
+       in the Toolbar, in the Theme.AppCompat theme:  -->
+        <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
+        <!-- android:textColorPrimaryInverse is the  color of the title
+       text in the Toolbar, in the Theme.AppCompat.Light theme:  -->
+        <!-- <item name="android:textColorPrimaryInverse">@color/abc_primary_text_material_light</item> -->
+        <!-- android:actionMenuTextColor is the color of the text of
+        action (menu) items in the Toolbar, at least in the
+        Theme.AppCompat theme.
+        For some reason, they already get the textColorPrimary
+        when running on API 21, but not on older versions of
+        Android, so this is only necessary to support older
+        Android versions.-->
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <!-- android:textColorSecondary is the color of the menu
+       overflow icon (three vertical dots) -->
+        <item name="android:textColorSecondary">@color/abc_secondary_text_material_dark</item>
+    </style>
+
+    <style name="contentMaterialLightBackground">
+        <item name="android:background">@color/background_material_light</item>
+        <item name="android:textColor">@color/primary_text_default_material_light</item>
+    </style>
+
+    <style name="customTextView" parent="@android:style/Widget.TextView">
+    </style>
+
+    <style name="titleTextViewStyle" parent="customTextView">
+        <item name="ng.codehaven.eko:font">fonts/Roboto-Thin.ttf</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="titleLargeTextViewStyle" parent="titleTextViewStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display3</item>
+    </style>
+    <style name="titleMediumTextViewStyle" parent="titleTextViewStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display2</item>
+    </style>
+    <style name="titleSmallTextViewStyle" parent="titleTextViewStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display1</item>
+    </style>
+
+    <style name="primaryBodyTextViewStyleBase" parent="@android:style/Widget.TextView">
+        <item name="ng.codehaven.eko:font">fonts/RobotoCondensed-Regular.ttf</item>
+    </style>
+    <style name="secondaryBodyTextViewStyleBase" parent="@android:style/Widget.TextView">
+        <item name="ng.codehaven.eko:font">fonts/RobotoCondensed-Light.ttf</item>
+    </style>
+    <style name="bodyTextViewStyle" parent="primaryBodyTextViewStyleBase">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+    <style name="bodyTextViewStyle2" parent="secondaryBodyTextViewStyleBase">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
     </style>
 
 </resources>

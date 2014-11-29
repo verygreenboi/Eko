@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:float="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    tools:context="ng.codehaven.eko.ui.fragments.SignInFragment">
+
+    <ng.codehaven.eko.ui.views.CustomTextView
+        android:id="@+id/registerTitle"
+        style="@style/titleSmallTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="48dp"
+        android:text="@string/sign_in_title_txt" />
+
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/logicalPinWrapLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_below="@+id/registerTitle"
+        float:fletPadding="10dp"
+        float:fletTextAppearance="@style/TextAppearance.AppCompat.Inverse">
+
+        <EditText
+            android:id="@+id/logicalPinEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sign_in_logical_pin_hint_txt"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColorHint="@color/colorPrimaryAccent_1">
+
+            <requestFocus />
+        </EditText>
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signInBtn"
+        android:layout_below="@+id/logicalPinWrapLayout"
+        android:text="@string/sign_in_title_txt"
+        android:textAllCaps="true"
+        />
+
+</RelativeLayout>
