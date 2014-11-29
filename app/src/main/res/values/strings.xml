@@ -63,5 +63,7 @@
     <string name="bank_label_txt">Bank</string>
     <string name="agent_label_txt">Agent</string>
     <string name="request_funds_btn_txt">Make Request</string>
+    <string name="request_sent_message_txt">Request sent.</string>
+    <string name="general_error_message_txt">Oops!!! Something fishy happend. Please try again.</string>
 
 </resources>

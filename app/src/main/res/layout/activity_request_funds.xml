@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ng.codehaven.eko.ui.activities.RequestFundsActivity">
@@ -10,8 +11,14 @@
         android:id="@+id/homeToolBar"
         layout="@layout/toolbar" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/homeToolBar" />
+
+    <LinearLayout
+        android:id="@+id/formWrap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/homeToolBar"
@@ -46,6 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="onRadioButtonClicked"
                 android:text="@string/bank_label_txt" />
 
             <RadioButton
@@ -53,6 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="onRadioButtonClicked"
                 android:text="@string/agent_label_txt" />
 
         </RadioGroup>
@@ -61,8 +70,8 @@
             android:id="@+id/amountFormWrap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="48dp">
+            android:layout_marginTop="48dp"
+            android:orientation="vertical">
 
             <ng.codehaven.eko.ui.views.CustomTextView
                 style="@style/bodyTextViewStyle2"
@@ -83,14 +92,15 @@
                 android:layout_marginTop="32dp"
                 android:hint="@string/enter_amount_hint_txt"
                 android:inputType="numberDecimal"
-                android:maxLines="1"/>
+                android:maxLines="1" />
 
             <Button
                 android:id="@+id/requestFundsSubmitBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/request_funds_btn_txt"/>
+                android:enabled="false"
+                android:text="@string/request_funds_btn_txt" />
 
         </LinearLayout>
 

@@ -11,4 +11,12 @@
     app:popupTheme="@style/contentMaterialLightBackground"
     tools:showIn="@layout/home_layout">
 
+    <ProgressBar
+        android:id="@+id/progress_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
 </android.support.v7.widget.Toolbar>

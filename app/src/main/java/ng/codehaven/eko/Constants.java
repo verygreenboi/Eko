@@ -56,4 +56,25 @@ public class Constants {
     public static final String KEY_QR_TYPE_PRODUCT = "product";
     public static final String KEY_QR_TYPE_SERVICE = "service";
 
+    // Parse.com Classes
+
+    public static final String CLASS_TRANSACTIONS = "transactions";
+
+    /**
+     * Transaction class objects
+     */
+
+    public static final String CLASS_TRANSACTIONS_FROM = "from";
+    public static final String CLASS_TRANSACTIONS_TO = "to";
+    public static final String CLASS_TRANSACTIONS_TYPE = "type";
+    public static final String CLASS_TRANSACTIONS_AMOUNT = "amount";
+    public static final String CLASS_TRANSACTIONS_RESOLUTION = "resolved";
+
+    // Transaction types
+    public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT = 0;
+    public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_BANK = 1;
+    public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_P2P = 2;
+    public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_PRODUCT_PURCHASE = 3;
+    public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_SERVICE_PURCHASE = 4;
+
 }
