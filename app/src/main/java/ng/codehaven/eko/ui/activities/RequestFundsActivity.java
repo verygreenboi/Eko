@@ -1,5 +1,6 @@
 package ng.codehaven.eko.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
-import ng.codehaven.eko.models.Transaction;
+import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.ShowQR;
 import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
@@ -125,9 +126,9 @@ public class RequestFundsActivity extends ActionBarActivity {
                 Bundle qrContent = new Bundle();
                 qrContent.putString("qrData", agentRequest.toString());
 
-                Transaction transaction = new Transaction(
+                mTransaction transaction = new mTransaction(
                         agentTransactionRequest.getObjectId(),
-                        mCurrentUser,
+                        mCurrentUser.getObjectId(),
                         null,
                         Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT,
                         Integer.parseInt(amount),
@@ -140,9 +141,21 @@ public class RequestFundsActivity extends ActionBarActivity {
                 mFormWrap.setVisibility(View.GONE);
 
                 getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), showQRFragment).commit();
+                showDone();
             }
         });
 
+    }
+
+    private void showDone() {
+        mToolbar.setNavigationIcon(R.drawable.ic_check_white);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent parentIntent = getSupportParentActivityIntent();
+                startActivity(parentIntent);
+            }
+        });
     }
 
     private void doBankRequest(String amount) {
