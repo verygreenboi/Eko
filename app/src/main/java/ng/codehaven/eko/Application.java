@@ -1,17 +1,13 @@
 package ng.codehaven.eko;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.orm.SugarApp;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
-import ng.codehaven.eko.ui.activities.HomeActivity;
 import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.RequestManager;
 

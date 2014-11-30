@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.models.Transaction;
 import ng.codehaven.eko.ui.fragments.ShowQR;
 import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
@@ -44,9 +45,11 @@ public class RequestFundsActivity extends ActionBarActivity {
     @InjectView(R.id.container)
     protected FrameLayout mContainer;
 
-    @InjectView(R.id.formWrap) protected LinearLayout mFormWrap;
+    @InjectView(R.id.formWrap)
+    protected LinearLayout mFormWrap;
 
-    @InjectView(R.id.progress_spinner) protected ProgressBar mProgressBar;
+    @InjectView(R.id.progress_spinner)
+    protected ProgressBar mProgressBar;
 
     // Is the button now checked?
     boolean checked;
@@ -94,7 +97,7 @@ public class RequestFundsActivity extends ActionBarActivity {
         });
     }
 
-    private void doAgentRequest(String amount) {
+    private void doAgentRequest(final String amount) {
         // Create new transaction qr and display here.
 
         agentRequest = new JSONObject();
@@ -106,10 +109,13 @@ public class RequestFundsActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        ParseObject agentTransactionRequest = new ParseObject(Constants.CLASS_TRANSACTIONS);
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_FROM, mCurrentUser);
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_TYPE, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT);
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_AMOUNT, Integer.parseInt(amount));
+        final ParseObject agentTransactionRequest = new ParseObject(Constants.CLASS_TRANSACTIONS);
+        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_FROM,
+                mCurrentUser);
+        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_TYPE,
+                Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT);
+        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_AMOUNT,
+                Integer.parseInt(amount));
         agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_RESOLUTION, false);
         agentTransactionRequest.saveInBackground(new SaveCallback() {
             @Override
@@ -118,6 +124,16 @@ public class RequestFundsActivity extends ActionBarActivity {
                 Fragment showQRFragment = new ShowQR();
                 Bundle qrContent = new Bundle();
                 qrContent.putString("qrData", agentRequest.toString());
+
+                Transaction transaction = new Transaction(
+                        agentTransactionRequest.getObjectId(),
+                        mCurrentUser,
+                        null,
+                        Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT,
+                        Integer.parseInt(amount),
+                        false
+                );
+                transaction.save();
 
                 showQRFragment.setArguments(qrContent);
 
@@ -196,7 +212,7 @@ public class RequestFundsActivity extends ActionBarActivity {
     private void hideSoftKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
-        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+        if (imm.isAcceptingText()) { // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
