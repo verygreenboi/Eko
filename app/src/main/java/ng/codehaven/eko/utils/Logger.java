@@ -10,7 +10,7 @@ import android.widget.Toast;
  */
 public class Logger {
     public static void m(String message) {
-        Log.d("EKO", message);
+        Log.d("EKO-log", message);
     }
 
     public static void s(Context context, String message) {

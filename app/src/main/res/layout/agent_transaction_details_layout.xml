@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--Toolbar-->
+
+    <include
+        android:id="@+id/homeToolBar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/homeToolBar"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/qrImageView"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ng.codehaven.eko.ui.views.CustomTextView
+                android:id="@+id/objectNum"
+                style="@style/titleMediumTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:minLines="1"
+                android:maxLines="2"
+                android:text="Object ID"/>
+
+            <ng.codehaven.eko.ui.views.CustomTextView
+                android:id="@+id/amount"
+                style="@style/titleSmallTextViewStyle"
+                android:textColor="@color/md_grey_700"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:drawableLeft="@drawable/ic_cash_in"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_cash_in"
+                android:text="Amount" />
+
+            <ng.codehaven.eko.ui.views.CustomTextView
+                android:id="@+id/timestamp"
+                style="@style/bodyTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/ic_history"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_history"
+                android:text="Create At"
+                android:textColor="@color/md_grey_500" />
+
+            <FrameLayout
+                android:id="@+id/resolutionWrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:background="@color/md_red_A400">
+
+                <ng.codehaven.eko.ui.views.CustomTextView
+                    android:id="@+id/resolved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text_default_material_dark"
+                    android:text="Unresolved"
+                    android:textAllCaps="true"/>
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<Button-->
+    <!--android:id="@+id/testBtn"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:text="Test"-->
+    <!--android:layout_marginLeft="@dimen/activity_vertical_margin"-->
+    <!--android:layout_marginRight="@dimen/activity_vertical_margin"-->
+    <!--android:layout_marginBottom="@dimen/activity_horizontal_margin"-->
+    <!--android:background="@drawable/flat_selector"/>-->
+
+</RelativeLayout>

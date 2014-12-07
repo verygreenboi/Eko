@@ -2,6 +2,7 @@ package ng.codehaven.eko.ui.fragments;
 
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -43,7 +44,7 @@ public class ShowQR extends Fragment {
         ImageView qrImageView = (ImageView)v.findViewById(R.id.qrImageView);
 
         try {
-            Bitmap qrBitmap = QRCodeHelper.generateQRCode(qrDataString, getActivity());
+            Bitmap qrBitmap = QRCodeHelper.generateQRCode(qrDataString, getActivity(), R.color.colorPrimary, android.R.color.transparent, 240, 240);
             qrImageView.setImageBitmap(qrBitmap);
 
         } catch (WriterException e) {

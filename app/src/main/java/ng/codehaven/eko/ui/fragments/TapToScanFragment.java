@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -17,7 +18,6 @@ import com.google.zxing.WriterException;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.HomeActivity;
-import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.QRCodeHelper;
 
@@ -28,7 +28,8 @@ public class TapToScanFragment extends Fragment {
     Context ctx;
     Bundle user;
     ImageView qrImageView;
-    CustomTextView tapToScanTextView;
+    Button mScanButton;
+    //    CustomTextView tapToScanTextView;
     FrameLayout tapCameraPreview;
 
     Animation
@@ -39,9 +40,10 @@ public class TapToScanFragment extends Fragment {
     public TapToScanFragment() {
     }
 
-    private Animation moveAnimation()  {
+    private Animation moveAnimation() {
         return moveAnimation = AnimationUtils.loadAnimation(ctx, R.anim.move);
     }
+
     private Animation fadeOutAnimation() {
         return fadeOutAnimation = AnimationUtils.loadAnimation(ctx, R.anim.fadeout);
     }
@@ -59,11 +61,19 @@ public class TapToScanFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         String data = user.getString("userQR");
-        tapToScanTextView = (CustomTextView) v.findViewById(R.id.tapToScanTextView);
-        tapCameraPreview = (FrameLayout)v.findViewById(R.id.tapCameraPreview);
+//        tapToScanTextView = (CustomTextView) v.findViewById(R.id.tapToScanTextView);
+        tapCameraPreview = (FrameLayout) v.findViewById(R.id.tapCameraPreview);
+        mScanButton = (Button)v.findViewById(R.id.ScanButton);
 
         try {
-            Bitmap qrBitmap = QRCodeHelper.generateQRCode(data, getActivity());
+            Bitmap qrBitmap = QRCodeHelper.generateQRCode(
+                    data,
+                    getActivity(),
+                    android.R.color.white,
+                    R.color.colorPrimary,
+                    240,
+                    240
+            );
             qrImageView = (ImageView) v.findViewById(R.id.qrImageView);
             qrImageView.setImageBitmap(qrBitmap);
             Logger.m(data);
@@ -78,39 +88,47 @@ public class TapToScanFragment extends Fragment {
 
             }
         });
-
-        tapToScanTextView.setOnClickListener(new View.OnClickListener() {
+        mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 clearOutViewsAnimations();
             }
         });
 
+//        tapToScanTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                clearOutViewsAnimations();
+//            }
+//        });
+
         return v;
     }
 
     private void clearOutViewsAnimations() {
-        qrImageView.startAnimation(fadeOutAnimation());
+//        qrImageView.startAnimation(fadeOutAnimation());
         qrImageView.setVisibility(View.GONE);
-        tapToScanTextView.startAnimation(moveAnimation());
-        tapToScanTextView.setVisibility(View.GONE);
+//        tapToScanTextView.startAnimation(moveAnimation());
+//        tapToScanTextView.setVisibility(View.GONE);
         tapCameraPreview.setVisibility(View.VISIBLE);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                    Intent i = new Intent(HomeActivity.SCANNER_INTENT_FILTER);
-                    ctx.sendBroadcast(i);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        Intent i = new Intent(HomeActivity.SCANNER_INTENT_FILTER);
+        ctx.sendBroadcast(i);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(500);
+//
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
-    public interface onViewsClicked{
+    public interface onViewsClicked {
         public void onClicked(int view);
     }
 }

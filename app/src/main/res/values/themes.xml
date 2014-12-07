@@ -58,7 +58,6 @@
     </style>
 
     <style name="cashInActivity" parent="activityStyle">
-        <item name="android:editTextStyle">@style/EditTexteko_theme_Light</item>
         <item name="android:textColorHint">@color/secondary_text_default_material_light</item>
     </style>
 

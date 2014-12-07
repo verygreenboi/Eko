@@ -3,6 +3,7 @@ package ng.codehaven.eko.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 
 /**
  * Created by mrsmith on 11/13/14.
@@ -27,5 +28,10 @@ public class Connectivity {
 
         }
         return false;
+    }
+
+    public String getCarrierName(){
+        TelephonyManager manager = (TelephonyManager)_context.getSystemService(Context.TELEPHONY_SERVICE);
+        return manager.getNetworkOperatorName();
     }
 }

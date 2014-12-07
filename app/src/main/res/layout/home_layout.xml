@@ -17,14 +17,14 @@
         android:layout_centerInParent="true"
         android:layout_below="@+id/homeToolBar" />
 
-    <!--Bottom Button-->
+    <!--&lt;!&ndash;Bottom Button&ndash;&gt;-->
 
-    <fragment
-        android:id="@+id/bottomButtonFragment"
-        android:name="ng.codehaven.eko.ui.fragments.BottomContactButtonFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        tools:layout="@layout/fragment_bottom_contact_button" />
+    <!--<fragment-->
+        <!--android:id="@+id/bottomButtonFragment"-->
+        <!--android:name="ng.codehaven.eko.ui.fragments.BottomContactButtonFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--tools:layout="@layout/fragment_bottom_contact_button" />-->
 
 </RelativeLayout>

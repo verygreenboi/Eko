@@ -2,6 +2,7 @@ package ng.codehaven.eko.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,7 @@ import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.ShowQR;
 import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
+import ng.codehaven.eko.utils.TimeUtils;
 
 public class RequestFundsActivity extends ActionBarActivity {
 
@@ -56,9 +58,10 @@ public class RequestFundsActivity extends ActionBarActivity {
     boolean checked;
     int requestSource;
 
-    JSONObject agentRequest;
+    JSONObject bankRequestObject;
 
     ParseUser mCurrentUser = ParseUser.getCurrentUser();
+    boolean isCheckShowing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,13 @@ public class RequestFundsActivity extends ActionBarActivity {
 
         init();
 
+        if (isCheckShowing) {
+            mFormWrap.setVisibility(View.GONE);
+            showDone();
+        }
+
     }
+
 
     private void init() {
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -101,53 +110,32 @@ public class RequestFundsActivity extends ActionBarActivity {
     private void doAgentRequest(final String amount) {
         // Create new transaction qr and display here.
 
-        agentRequest = new JSONObject();
+        bankRequestObject = new JSONObject();
         try {
-            agentRequest.put(Constants.CLASS_TRANSACTIONS_FROM, mCurrentUser);
-            agentRequest.put(Constants.CLASS_TRANSACTIONS_TYPE, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT);
-            agentRequest.put(Constants.CLASS_TRANSACTIONS_AMOUNT, Integer.parseInt(amount));
+            bankRequestObject.put(Constants.CLASS_TRANSACTIONS_FROM, mCurrentUser);
+            bankRequestObject.put(Constants.CLASS_TRANSACTIONS_TYPE, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT);
+            bankRequestObject.put(Constants.CLASS_TRANSACTIONS_AMOUNT, Integer.parseInt(amount));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        final ParseObject agentTransactionRequest = new ParseObject(Constants.CLASS_TRANSACTIONS);
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_FROM,
-                mCurrentUser);
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_TYPE,
-                Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT);
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_AMOUNT,
-                Integer.parseInt(amount));
-        agentTransactionRequest.put(Constants.CLASS_TRANSACTIONS_RESOLUTION, false);
-        agentTransactionRequest.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-                Fragment showQRFragment = new ShowQR();
-                Bundle qrContent = new Bundle();
-                qrContent.putString("qrData", agentRequest.toString());
 
-                mTransaction transaction = new mTransaction(
-                        agentTransactionRequest.getObjectId(),
-                        mCurrentUser.getObjectId(),
-                        null,
-                        Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT,
-                        Integer.parseInt(amount),
-                        false
-                );
-                transaction.save();
+        mProgressBar.setVisibility(View.INVISIBLE);
 
-                showQRFragment.setArguments(qrContent);
+        saveTransaction(amount, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_AGENT);
 
-                mFormWrap.setVisibility(View.GONE);
-
-                getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), showQRFragment).commit();
-                showDone();
-            }
-        });
+        Fragment showQRFragment = new ShowQR();
+        Bundle qrContent = new Bundle();
+        qrContent.putString("qrData", bankRequestObject.toString());
+        showQRFragment.setArguments(qrContent);
+        mFormWrap.setVisibility(View.GONE);
+        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), showQRFragment).commit();
+        showDone();
 
     }
 
     private void showDone() {
+        isCheckShowing = true;
         mToolbar.setNavigationIcon(R.drawable.ic_check_white);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,7 +146,7 @@ public class RequestFundsActivity extends ActionBarActivity {
         });
     }
 
-    private void doBankRequest(String amount) {
+    private void doBankRequest(final String amount) {
         // Create new transaction and save on Parse.com
         ParseObject bankRequest = new ParseObject(Constants.CLASS_TRANSACTIONS);
         bankRequest.put(Constants.CLASS_TRANSACTIONS_FROM, mCurrentUser);
@@ -170,8 +158,20 @@ public class RequestFundsActivity extends ActionBarActivity {
             public void done(ParseException e) {
                 mProgressBar.setVisibility(View.INVISIBLE);
                 if (e == null) {
+
+                    bankRequestObject = new JSONObject();
+                    try {
+                        bankRequestObject.put(Constants.CLASS_TRANSACTIONS_FROM, mCurrentUser);
+                        bankRequestObject.put(Constants.CLASS_TRANSACTIONS_TYPE, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_BANK);
+                        bankRequestObject.put(Constants.CLASS_TRANSACTIONS_AMOUNT, Integer.parseInt(amount));
+                    } catch (JSONException el) {
+                        el.printStackTrace();
+                    }
+
+                    saveTransaction(amount, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_BANK);
+
                     Logger.s(getApplicationContext(), getString(R.string.request_sent_message_txt));
-                    IntentUtils.startActivity(getApplicationContext(), HomeActivity.class);
+                    IntentUtils.startActivity(RequestFundsActivity.this, HomeActivity.class);
                     finish();
                 } else if (e.getCode() == ParseException.CONNECTION_FAILED || e.getCode() == ParseException.TIMEOUT) {
                     mButton.setEnabled(true);
@@ -182,6 +182,20 @@ public class RequestFundsActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    private void saveTransaction(String amount, int type) {
+        mTransaction transaction = new mTransaction(
+                mCurrentUser.getObjectId()+"-"+String.valueOf(TimeUtils.getCurrentTime()),
+                mCurrentUser.getObjectId(),
+                "agent",
+                type,
+                Integer.parseInt(amount),
+                false,
+                TimeUtils.getCurrentTime()
+        );
+
+        transaction.save();
     }
 
     public void onRadioButtonClicked(View view) {
@@ -228,5 +242,22 @@ public class RequestFundsActivity extends ActionBarActivity {
         if (imm.isAcceptingText()) { // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("isChecked", isCheckShowing);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        isCheckShowing = savedInstanceState.getBoolean("isChecked");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

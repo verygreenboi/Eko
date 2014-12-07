@@ -65,5 +65,9 @@
     <string name="request_funds_btn_txt">Make Request</string>
     <string name="request_sent_message_txt">Request sent.</string>
     <string name="general_error_message_txt">Oops!!! Something fishy happend. Please try again.</string>
+    <string name="title_activity_transaction_detail">TransactionDetailActivity</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="scan_qr_btn_txt">Scan QR</string>
 
 </resources>

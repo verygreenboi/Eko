@@ -32,13 +32,17 @@
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            float:fletPadding="10dp"
+            float:fletPaddingLeft="0dp"
+            float:fletPaddingRight="0dp"
+            float:fletPaddingTop="8dp"
+            float:fletPaddingBottom="8dp"
             float:fletTextAppearance="@style/TextAppearance.AppCompat.Inverse">
 
             <EditText
                 android:id="@+id/fundRequestEditView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/primary_text_default_material_light"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:hint="@string/enter_amount_hint_txt"
                 android:inputType="number"
@@ -50,8 +54,11 @@
 
         <Button
             android:id="@+id/sendBtn"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/flat_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAllCaps="true"
             android:text="@string/send_txt" />
     </LinearLayout>
 

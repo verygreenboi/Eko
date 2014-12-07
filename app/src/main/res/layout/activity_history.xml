@@ -10,10 +10,18 @@
         android:id="@+id/homeToolBar"
         layout="@layout/toolbar" />
 
-    <TextView
+    <ng.codehaven.eko.ui.views.SlidingTabLayout
+        android:id="@+id/tabs"
         android:layout_below="@+id/homeToolBar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabs"
+        tools:context=".MainActivity" />
 
 </RelativeLayout>

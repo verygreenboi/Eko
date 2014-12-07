@@ -18,17 +18,18 @@ import ng.codehaven.eko.R;
 
 /**
  * Created by mrsmith on 11/24/14.
+ * QR Encoding/Decoding Utility
  */
 public class QRCodeHelper {
 
-    public static Bitmap generateQRCode(String data, Context context) throws WriterException {
+    public static Bitmap generateQRCode(String data, Context context, int color1, int color2, int w, int h) throws WriterException {
         com.google.zxing.Writer writer = new QRCodeWriter();
         String finalData = Uri.encode(data, "utf-8");
-        BitMatrix bm = writer.encode(finalData, BarcodeFormat.QR_CODE, 150, 150);
-        Bitmap QRBitMap = Bitmap.createBitmap(150, 150, Bitmap.Config.ARGB_8888);
-        for (int i = 0; i < 150; i++) {//width
-            for (int j = 0; j < 150; j++) {//height
-                QRBitMap.setPixel(i, j, bm.get(i, j) ? context.getResources().getColor(R.color.colorPrimaryDark) : Color.TRANSPARENT);
+        BitMatrix bm = writer.encode(finalData, BarcodeFormat.QR_CODE, w, h);
+        Bitmap QRBitMap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        for (int i = 0; i < w; i++) {//width
+            for (int j = 0; j < h; j++) {//height
+                QRBitMap.setPixel(i, j, bm.get(i, j) ? context.getResources().getColor(color1) : context.getResources().getColor(color2));
             }
         }
         return QRBitMap;

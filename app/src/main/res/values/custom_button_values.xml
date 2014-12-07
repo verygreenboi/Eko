@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="_c_button_pressed">@color/colorPrimaryDark</color>
+    <color name="_c_button_normal">@color/colorPrimary</color>
+
+    <dimen name="corner_radius">4dp</dimen>
+    <dimen name="layer_padding">3dp</dimen>
+
+</resources>

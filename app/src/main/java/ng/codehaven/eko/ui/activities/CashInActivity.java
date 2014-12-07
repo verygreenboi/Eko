@@ -1,7 +1,7 @@
 package ng.codehaven.eko.ui.activities;
 
 import android.content.Intent;
-import android.net.Network;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,12 +19,15 @@ import ng.codehaven.eko.utils.Connectivity;
 
 public class CashInActivity extends ActionBarActivity {
 
-    @InjectView(R.id.homeToolBar) protected Toolbar mToolbar;
-    @InjectView(R.id.sendBtn) protected Button mSendBtn;
+    @InjectView(R.id.homeToolBar)
+    protected Toolbar mToolbar;
+    @InjectView(R.id.sendBtn)
+    protected Button mSendBtn;
 
     private int mCurrentBalance = 0;
     private ParseUser mCurrentUser;
     private Connectivity cd;
+    private Typeface mFont;
 
     @Override
     public Intent getSupportParentActivityIntent() {
@@ -56,7 +59,11 @@ public class CashInActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!cd.isConnectingToInternet()){
+
+        mFont = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
+        mSendBtn.setTypeface(mFont);
+
+        if (!cd.isConnectingToInternet()) {
             mSendBtn.setEnabled(false);
         }
     }

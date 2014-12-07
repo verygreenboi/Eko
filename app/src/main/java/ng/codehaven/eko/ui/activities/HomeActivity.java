@@ -18,10 +18,13 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.ocpsoft.pretty.time.PrettyTime;
 import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -165,8 +168,7 @@ public class HomeActivity extends BaseToolbarActivity implements
                 break;
             case R.id.action_signOut:
                 if (mCurrentUser.isAuthenticated()) {
-                    ParseUser.logOut();
-                    mCurrentUser = ParseUser.getCurrentUser();
+                    IntentUtils.logout(HomeActivity.this);
                     finish();
                 }
                 break;
@@ -243,12 +245,11 @@ public class HomeActivity extends BaseToolbarActivity implements
         mProfileEmail.setText(email);
         mProfileEmail.setTextColor(getResources().getColor(R.color.secondary_text_default_material_dark));
 
-        mToolbar.setLogo(R.drawable.ic_android);
+        mToolbar.setTitle(getString(R.string.app_name));
+
         defaultToolBarState();
         loadHomeFragment();
         mNavListView.setOnItemClickListener(this);
-
-        Log.d("TAG", mNavDrawerItems.toString());
     }
 
     private void loadHomeFragment() {
@@ -264,6 +265,13 @@ public class HomeActivity extends BaseToolbarActivity implements
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        long now = new Date().getTime();
+        PrettyTime mPtime = new PrettyTime();
+
+        String convertedTime = mPtime.format(new Date(now));
+
+        Logger.m(convertedTime);
 
         int mCurrentFragment = 0;
         tapToScanFragment = new TapToScanFragment();
