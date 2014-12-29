@@ -11,6 +11,15 @@
     app:popupTheme="@style/contentMaterialLightBackground"
     tools:showIn="@layout/home_layout">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:textColor="@color/primary_text_default_material_dark"
+        android:textAllCaps="true"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:id="@+id/toolbar_title" />
+
     <ProgressBar
         android:id="@+id/progress_spinner"
         android:layout_width="wrap_content"

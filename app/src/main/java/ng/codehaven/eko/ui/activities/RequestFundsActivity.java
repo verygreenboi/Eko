@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ng.codehaven.eko.BuildType;
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.models.mTransaction;
@@ -61,6 +62,7 @@ public class RequestFundsActivity extends ActionBarActivity {
     JSONObject bankRequestObject;
 
     ParseUser mCurrentUser = ParseUser.getCurrentUser();
+    String mUserId;
     boolean isCheckShowing;
 
     @Override
@@ -75,6 +77,12 @@ public class RequestFundsActivity extends ActionBarActivity {
         if (isCheckShowing) {
             mFormWrap.setVisibility(View.GONE);
             showDone();
+        }
+
+        if (BuildType.type == 0){
+            mUserId = "debug";
+        }else {
+            mUserId = mCurrentUser.getObjectId();
         }
 
     }
@@ -161,7 +169,7 @@ public class RequestFundsActivity extends ActionBarActivity {
 
                     bankRequestObject = new JSONObject();
                     try {
-                        bankRequestObject.put(Constants.CLASS_TRANSACTIONS_FROM, mCurrentUser);
+                        bankRequestObject.put(Constants.CLASS_TRANSACTIONS_FROM, mUserId);
                         bankRequestObject.put(Constants.CLASS_TRANSACTIONS_TYPE, Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_BANK);
                         bankRequestObject.put(Constants.CLASS_TRANSACTIONS_AMOUNT, Integer.parseInt(amount));
                     } catch (JSONException el) {
@@ -186,11 +194,12 @@ public class RequestFundsActivity extends ActionBarActivity {
 
     private void saveTransaction(String amount, int type) {
         mTransaction transaction = new mTransaction(
-                mCurrentUser.getObjectId()+"-"+String.valueOf(TimeUtils.getCurrentTime()),
-                mCurrentUser.getObjectId(),
+                mUserId+"-"+String.valueOf(TimeUtils.getCurrentTime()),
+                mUserId,
                 "agent",
                 type,
                 Integer.parseInt(amount),
+                false,
                 false,
                 TimeUtils.getCurrentTime()
         );

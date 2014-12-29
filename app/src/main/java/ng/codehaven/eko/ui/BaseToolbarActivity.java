@@ -32,7 +32,7 @@ public abstract class BaseToolbarActivity extends ActionBarActivity {
         mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_REQUEST_FUNDS);
         mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_CASH_IN);
         mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_TRANSACTION_HISTORY);
-        mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_PROMO);
+        mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_CONTACTS);
         mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_SEPARATOR);
         mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_BUSINESSES);
         mNavDrawerItems.add(Constants.NAVDRAWER_ITEM_SETTINGS);

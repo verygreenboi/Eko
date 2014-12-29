@@ -2,7 +2,6 @@ package ng.codehaven.eko.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 
 import com.google.zxing.BarcodeFormat;
@@ -13,8 +12,10 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ng.codehaven.eko.Constants;
-import ng.codehaven.eko.R;
 
 /**
  * Created by mrsmith on 11/24/14.
@@ -45,7 +46,7 @@ public class QRCodeHelper {
         if (qr_type != null) {
             if (qr_type.equals(Constants.KEY_QR_TYPE_PERSONAL)) {
                 return 0;
-            } else if (qr_type.equals(Constants.KEY_QR_TYPE_PROMOTION)) {
+            } else if (qr_type.equals(Constants.KEY_QR_TYPE_CONTACTS)) {
                 return 1;
             } else if (qr_type.equals(Constants.KEY_QR_TYPE_BUSINESS)) {
                 return 2;
@@ -60,6 +61,10 @@ public class QRCodeHelper {
 
     private static String getQRTypeString(JSONObject qrJSONObject) throws JSONException {
         return qrJSONObject.getString(Constants.KEY_QR_TYPE);
+    }
+
+    public static String[] getValuesFromString(String data){
+        return data.split("\\s*,\\s*");
     }
 
 }

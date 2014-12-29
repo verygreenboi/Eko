@@ -10,22 +10,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.zxing.WriterException;
 import com.ocpsoft.pretty.time.PrettyTime;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.views.CustomTextView;
+import ng.codehaven.eko.utils.FontCache;
+import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.QRCodeHelper;
 
 public class TransactionDetailActivity extends ActionBarActivity {
@@ -37,6 +44,8 @@ public class TransactionDetailActivity extends ActionBarActivity {
 
 
     private Typeface mButtonFont;
+
+    private TextView mToolBarTitle;
 
     String
             mTitle,
@@ -50,10 +59,13 @@ public class TransactionDetailActivity extends ActionBarActivity {
     ImageView qrImageView;
 
     private JSONObject jsonObject;
+    private JSONArray transactions;
     private int
             mTransactionType,
             layoutId,
             mAmount;
+
+    boolean hasResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +73,59 @@ public class TransactionDetailActivity extends ActionBarActivity {
         Intent extra = getIntent();
         String jsonData = extra.getStringExtra("jsonObject");
 
-        try {
-            jsonObject = new JSONObject(jsonData);
-            mObject = jsonObject.getString("id");
-            mTransactionType = jsonObject.getInt("tType");
-            mAmount = jsonObject.getInt("amount");
-            mCreatedAt = mPtime.format(new Date(jsonObject.getLong("createdAt")));
-            isResolved = jsonObject.getBoolean("isResolved");
-        } catch (JSONException e) {
-            e.printStackTrace();
+//        try {
+//            jsonObject = new JSONObject(jsonData);
+//            mObject = jsonObject.getString("id");
+//            mTransactionType = jsonObject.getInt("tType");
+//            mAmount = jsonObject.getInt("amount");
+//            mCreatedAt = mPtime.format(new Date(jsonObject.getLong("createdAt")));
+//            isResolved = jsonObject.getBoolean("isResolved");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+
+        String id = extra.getStringExtra("id");
+        transactions = new JSONArray();
+        List<mTransaction> transaction = mTransaction.find(mTransaction.class, "OBJECT_NUM = ?", id);
+        for (mTransaction t : transaction) {
+            jsonObject = new JSONObject();
+            String mId = t.getObjectNum();
+            String from = t.getmFrom();
+            String to = t.getmTo();
+            int tType = t.gettType();
+            int amount = t.getAmount();
+            boolean isResolved = t.isResolved();
+            long createdAt = t.getCreatedAt();
+
+            try {
+                jsonObject.put("id", mId);
+                jsonObject.put("from", from);
+                jsonObject.put("to", to);
+                jsonObject.put("tType", tType);
+                jsonObject.put("amount", amount);
+                jsonObject.put("isResolved", isResolved);
+                jsonObject.put("createdAt", createdAt);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            transactions.put(jsonObject);
+        }
+
+        hasResults = transactions.length() != 0 && transactions.length() < 2;
+
+        if (hasResults) {
+            try {
+                JSONObject jObj = new JSONObject(String.valueOf(transactions.get(0)));
+                mObject = jObj.getString("id");
+                mTransactionType = jObj.getInt("tType");
+                mAmount = jObj.getInt("amount");
+                mCreatedAt = mPtime.format(new Date(jObj.getLong("createdAt")));
+                isResolved = jObj.getBoolean("isResolved");
+//                Logger.m(jObj.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         switch (mTransactionType) {
@@ -92,6 +148,7 @@ public class TransactionDetailActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -102,13 +159,17 @@ public class TransactionDetailActivity extends ActionBarActivity {
                 startActivity(i);
             }
         });
+
+        mToolBarTitle = (TextView)mToolbar.findViewById(R.id.toolbar_title);
+        mToolBarTitle.setTypeface(FontCache.get(Constants.ABC_FONT, TransactionDetailActivity.this));
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        mToolbar.setTitle(mTitle);
+        mToolBarTitle.setText(mTitle);
 
         switch (mTransactionType) {
             case Constants.CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_BANK:

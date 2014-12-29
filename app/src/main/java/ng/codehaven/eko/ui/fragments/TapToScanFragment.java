@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.zxing.WriterException;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.HomeActivity;
+import ng.codehaven.eko.utils.FontCache;
 import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.QRCodeHelper;
 
@@ -25,6 +28,8 @@ import ng.codehaven.eko.utils.QRCodeHelper;
  * Created by mrsmith on 11/26/14.
  */
 public class TapToScanFragment extends Fragment {
+    private static final int RESULT_OK = 1;
+    private static final int RESULT_CANCELED = 0;
     Context ctx;
     Bundle user;
     ImageView qrImageView;
@@ -61,9 +66,13 @@ public class TapToScanFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         String data = user.getString("userQR");
+        Logger.m("FROM BUNDLE --> "+data);
 //        tapToScanTextView = (CustomTextView) v.findViewById(R.id.tapToScanTextView);
         tapCameraPreview = (FrameLayout) v.findViewById(R.id.tapCameraPreview);
         mScanButton = (Button)v.findViewById(R.id.ScanButton);
+
+        mScanButton.setTypeface(FontCache.get("fonts/Roboto-Medium.ttf", getActivity()));
+        mScanButton.setTextColor(getResources().getColor(R.color.primary_text_default_material_dark));
 
         try {
             Bitmap qrBitmap = QRCodeHelper.generateQRCode(
@@ -76,7 +85,6 @@ public class TapToScanFragment extends Fragment {
             );
             qrImageView = (ImageView) v.findViewById(R.id.qrImageView);
             qrImageView.setImageBitmap(qrBitmap);
-            Logger.m(data);
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -105,6 +113,9 @@ public class TapToScanFragment extends Fragment {
         return v;
     }
 
+
+
+
     private void clearOutViewsAnimations() {
 //        qrImageView.startAnimation(fadeOutAnimation());
         qrImageView.setVisibility(View.GONE);
@@ -112,8 +123,13 @@ public class TapToScanFragment extends Fragment {
 //        tapToScanTextView.setVisibility(View.GONE);
         tapCameraPreview.setVisibility(View.VISIBLE);
 
+
         Intent i = new Intent(HomeActivity.SCANNER_INTENT_FILTER);
         ctx.sendBroadcast(i);
+
+//        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+//        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+//        startActivityForResult(intent, 0);
 
 //        new Thread(new Runnable() {
 //            @Override

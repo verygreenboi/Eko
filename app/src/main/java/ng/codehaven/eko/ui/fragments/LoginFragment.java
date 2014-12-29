@@ -21,6 +21,7 @@ import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.ui.activities.RegisterLoginActivity;
 import ng.codehaven.eko.ui.widgets.CameraPreview;
 import ng.codehaven.eko.utils.IntentUtils;
 
@@ -167,7 +168,7 @@ public class LoginFragment extends Fragment {
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
                     IntentUtils.startActivityWithStringExtra(getActivity(),
-                            RegisterFragment.class,
+                            RegisterLoginActivity.class,
                             EXTRA_MESSAGE,
                             sym.getData());
 

@@ -2,17 +2,27 @@ package ng.codehaven.eko;
 
 /**
  * Created by mrsmith on 11/9/14.
- * Constants class
+ * ng.codehaven.eko.ng.codehaven.eko.release.Constants class
  */
 public class Constants {
 
     public static final String KEY_USER = "_user";
     public static final String KEY_USER_ID = "userId";
 
+    public enum flavorType{
+        USER, AGENT, ADMIN
+    }
+
+    public static final boolean BUILD_DEBUG = BuildType.type == 0;
+
+    public static final int[] buildType = {0,1};
+
+    public static final String ABC_FONT = "fonts/Armata-Regular.otf";
+
     public static final int NAVDRAWER_ITEM_REQUEST_FUNDS = 0;
     public static final int NAVDRAWER_ITEM_CASH_IN = 1;
     public static final int NAVDRAWER_ITEM_TRANSACTION_HISTORY = 2;
-    public static final int NAVDRAWER_ITEM_PROMO = 3;
+    public static final int NAVDRAWER_ITEM_CONTACTS = 3;
     public static final int NAVDRAWER_ITEM_BUSINESSES = 4;
     public static final int NAVDRAWER_ITEM_SETTINGS = 5;
     public static final int NAVDRAWER_ITEM_INVALID = -1;
@@ -23,7 +33,7 @@ public class Constants {
             R.string.navdrawer_item_request_funds,
             R.string.navdrawer_item_cash_in,
             R.string.navdrawer_item_transaction_history,
-            R.string.navdrawer_item_promo,
+            R.string.navdrawer_item_contacts,
             R.string.navdrawer_item_businesses,
             R.string.navdrawer_item_settings
     };
@@ -32,7 +42,7 @@ public class Constants {
             R.drawable.ic_request_funds,
             R.drawable.ic_cash_in,
             R.drawable.ic_history,
-            R.drawable.ic_promo,
+            R.drawable.ic_contact_black,
             R.drawable.ic_businesses,
             R.drawable.ic_settings
     };
@@ -51,7 +61,7 @@ public class Constants {
     public static final String KEY_QR_TYPE = "qr_type";
 
     public static final String KEY_QR_TYPE_PERSONAL = "personal";
-    public static final String KEY_QR_TYPE_PROMOTION = "promotion";
+    public static final String KEY_QR_TYPE_CONTACTS = "contacts";
     public static final String KEY_QR_TYPE_BUSINESS = "business";
     public static final String KEY_QR_TYPE_PRODUCT = "product";
     public static final String KEY_QR_TYPE_SERVICE = "service";

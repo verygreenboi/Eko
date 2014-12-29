@@ -1,7 +1,6 @@
 package ng.codehaven.eko.ui.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +11,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.fragments.historyFragments.FundRequestHistory;
 import ng.codehaven.eko.ui.fragments.historyFragments.PurchaseFragment;
 import ng.codehaven.eko.ui.fragments.historyFragments.TicketsFragment;
 import ng.codehaven.eko.ui.fragments.historyFragments.TransferFragment;
 import ng.codehaven.eko.ui.views.SlidingTabLayout;
+import ng.codehaven.eko.utils.FontCache;
 
 public class HistoryActivity extends ActionBarActivity {
 
@@ -44,6 +46,8 @@ public class HistoryActivity extends ActionBarActivity {
     @InjectView(R.id.tabs)
     protected SlidingTabLayout mSlidingTabs;
 
+    private TextView mToolBarTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,7 @@ public class HistoryActivity extends ActionBarActivity {
 
         // Setup toolbar
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +65,10 @@ public class HistoryActivity extends ActionBarActivity {
                 startActivity(parentIntent);
             }
         });
+
+        mToolBarTitle = (TextView)mToolbar.findViewById(R.id.toolbar_title);
+        mToolBarTitle.setTypeface(FontCache.get(Constants.ABC_FONT, HistoryActivity.this));
+        mToolBarTitle.setText(getString(R.string.title_activity_history));
 
         HistoryPagerAdapter adapter = new HistoryPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(adapter);

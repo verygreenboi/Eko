@@ -14,8 +14,10 @@ import com.parse.ParseUser;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.utils.Connectivity;
+import ng.codehaven.eko.utils.FontCache;
 
 public class CashInActivity extends ActionBarActivity {
 
@@ -42,6 +44,7 @@ public class CashInActivity extends ActionBarActivity {
 
         // Setup Toolbar
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,9 +62,7 @@ public class CashInActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        mFont = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
-        mSendBtn.setTypeface(mFont);
+        mSendBtn.setTypeface(FontCache.get(Constants.ABC_FONT, this));
 
         if (!cd.isConnectingToInternet()) {
             mSendBtn.setEnabled(false);

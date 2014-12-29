@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 
 import com.android.volley.toolbox.ImageLoader;
 
-import ng.codehaven.eko.Application;
-
 
 /**
  * Implementation of volley's ImageCache interface. This manager tracks the application image loader and cache.

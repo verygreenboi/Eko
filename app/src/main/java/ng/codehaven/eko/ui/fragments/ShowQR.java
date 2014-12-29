@@ -2,9 +2,7 @@ package ng.codehaven.eko.ui.fragments;
 
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.zxing.WriterException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Random;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.utils.QRCodeHelper;

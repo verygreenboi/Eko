@@ -3,8 +3,15 @@
     android:layout_height="match_parent"
     tools:context="ng.codehaven.eko.ui.fragments.historyFragments.PurchaseFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/purchaseList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:recyclerClipToPadding="false"
+        app:layout_empty="@layout/empty_view"
+        app:layout_moreProgress="@layout/view_more_progress"
+        app:scrollbarStyle="outsideOverlay" >
+    </com.malinskiy.superrecyclerview.SuperRecyclerView>
 
 </FrameLayout>

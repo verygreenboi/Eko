@@ -117,32 +117,29 @@
     <style name="customTextView" parent="@android:style/Widget.TextView">
     </style>
 
-    <style name="titleTextViewStyle" parent="customTextView">
-        <item name="ng.codehaven.eko:font">fonts/Roboto-Thin.ttf</item>
+    <style name="addressHeader" parent="@android:style/TextAppearance.Small">
+        <item name="textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="addressDetail" parent="@android:style/TextAppearance.Medium">
+    </style>
+
+    <style name="contactNameTitle" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">38sp</item>
+    </style>
+
+    <style name="addressButton"/>
+
+    <style name="listViewActivatedStyle"/>
+
+    <style name="searchTextHiglight">
         <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="titleLargeTextViewStyle" parent="titleTextViewStyle">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display3</item>
-    </style>
-    <style name="titleMediumTextViewStyle" parent="titleTextViewStyle">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display2</item>
-    </style>
-    <style name="titleSmallTextViewStyle" parent="titleTextViewStyle">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display1</item>
-    </style>
-
-    <style name="primaryBodyTextViewStyleBase" parent="@android:style/Widget.TextView">
-        <item name="ng.codehaven.eko:font">fonts/RobotoCondensed-Regular.ttf</item>
-    </style>
-    <style name="secondaryBodyTextViewStyleBase" parent="@android:style/Widget.TextView">
-        <item name="ng.codehaven.eko:font">fonts/RobotoCondensed-Light.ttf</item>
-    </style>
-    <style name="bodyTextViewStyle" parent="primaryBodyTextViewStyleBase">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
-    </style>
-    <style name="bodyTextViewStyle2" parent="secondaryBodyTextViewStyleBase">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+    <style name="quickContactBadgeStyle">
+        <item name="android:background">@drawable/quickcontact_badge_small</item>
     </style>
 
 </resources>

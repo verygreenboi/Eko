@@ -10,11 +10,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.fragments.SettingsPreferenceFragment;
+import ng.codehaven.eko.utils.FontCache;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -47,6 +50,7 @@ public class SettingsActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolBar.setNavigationIcon(R.drawable.ic_arrow_back);
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +59,9 @@ public class SettingsActivity extends ActionBarActivity {
                 startActivity(parentIntent);
             }
         });
+
+        TextView mToolBarTitle = (TextView)mToolBar.findViewById(R.id.toolbar_title);
+        mToolBarTitle.setTypeface(FontCache.get(Constants.ABC_FONT, SettingsActivity.this));
 
 //        getFragmentManager().beginTransaction().replace(mFragmentContainerLayout, new SettingsPreferenceFragment()).commit()
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

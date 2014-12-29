@@ -26,12 +26,14 @@ import net.sourceforge.zbar.SymbolSet;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import ng.codehaven.eko.Application;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.BusinessAction;
+import ng.codehaven.eko.ui.activities.ContactsActivity;
 import ng.codehaven.eko.ui.activities.PersonalUserQR;
 import ng.codehaven.eko.ui.activities.ProductsAction;
-import ng.codehaven.eko.ui.activities.PromoActivity;
 import ng.codehaven.eko.ui.activities.ServiceAction;
 import ng.codehaven.eko.ui.widgets.CameraPreview;
 import ng.codehaven.eko.utils.IntentUtils;
@@ -41,6 +43,7 @@ import ng.codehaven.eko.utils.QRCodeHelper;
 /**
  * Created by mrsmith on 11/17/14.
  * Scanner Fragment
+ * TODO: Fix camera preview bug
  */
 public class ScanFragment extends Fragment {
 
@@ -79,9 +82,13 @@ public class ScanFragment extends Fragment {
 
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
-                    scanText.setText("barcode result " + sym.getData());
+//                    scanText.setText("barcode result " + sym.getData());
                     Logger.s(getActivity(), sym.getData());
 
+                    // Get QR data to List<String>
+                    String[] values = QRCodeHelper.getValuesFromString(sym.getData());
+                    Logger.m("Size = "+String.valueOf(values.length) + " "+ values[0]);
+                    Logger.s(ctx, "Size = "+String.valueOf(values.length) + " "+ values[0]);
                     try {
                         JSONObject qrJSONObject = new JSONObject(sym.getData());
                         if (QRCodeHelper.isValidQRCode(qrJSONObject)) {
@@ -118,7 +125,7 @@ public class ScanFragment extends Fragment {
                 break;
             case 1:
                 // Promotion QRCode
-                IntentUtils.startActivityWithJSON(ctx, qrJSONObject, PromoActivity.class);
+                IntentUtils.startActivityWithJSON(ctx, qrJSONObject, ContactsActivity.class);
                 break;
             case 2:
                 // Business QRCode
@@ -188,6 +195,14 @@ public class ScanFragment extends Fragment {
         releaseCamera();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mPreview != null){
+            mPreview = null;
+        }
+    }
+
     /**
      * Clear any existing preview / camera.
      */
@@ -218,4 +233,6 @@ public class ScanFragment extends Fragment {
             mCamera.autoFocus(autoFocusCB);
         }
     }
+
+
 }

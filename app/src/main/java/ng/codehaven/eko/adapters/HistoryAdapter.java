@@ -26,6 +26,11 @@ public class HistoryAdapter extends ArrayAdapter<JSONObject> {
     private ArrayList<JSONObject> transactions;
     private Context context;
 
+
+    private int count;
+    private int stepNumber;
+    private int startCount;
+
     PrettyTime mPtime = new PrettyTime();
 
     boolean isResolved = false;
@@ -34,12 +39,18 @@ public class HistoryAdapter extends ArrayAdapter<JSONObject> {
             objNum,
             createdAt;
 
-    ListItemClickListener listener = new ListItemClickListener();
-
-    public HistoryAdapter(Context context, ArrayList<JSONObject> transactions) {
+    public HistoryAdapter(Context context, ArrayList<JSONObject> transactions, int startCount, int stepNumber) {
         super(context, 0, transactions);
         this.context = getContext();
         this.transactions = transactions;
+        this.startCount = Math.min(startCount, transactions.size()); //don't try to show more views than we have
+        this.count = this.startCount;
+        this.stepNumber = stepNumber;
+    }
+
+    @Override
+    public int getCount() {
+        return count;
     }
 
     @Override
@@ -87,13 +98,42 @@ public class HistoryAdapter extends ArrayAdapter<JSONObject> {
         return convertView;
     }
 
-    private class ListItemClickListener implements View.OnClickListener {
+    public void removeViaSwipe(int position) {
+        transactions.remove(position);
 
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
+        //Because item is already out of view via swipe do not animate this with default animator
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Show more views, or the bottom
+     * @return true if the entire data set is being displayed, false otherwise
+     */
+    public boolean showMore(){
+        if(count == transactions.size()) {
+            return true;
+        }else{
+            count = Math.min(count + stepNumber, transactions.size()); //don't go past the end
+            notifyDataSetChanged(); //the count size has changed, so notify the super of the change
+            return endReached();
         }
     }
+
+    /**
+     * @return true if then entire data set is being displayed, false otherwise
+     */
+    public boolean endReached(){
+        return count == transactions.size();
+    }
+
+    /**
+     * Sets the ListView back to its initial count number
+     */
+    public void reset(){
+        count = startCount;
+        notifyDataSetChanged();
+    }
+
 
     public static class ViewHolder {
         public BezelImageView image;
