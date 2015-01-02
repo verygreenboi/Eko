@@ -10,4 +10,16 @@
         android:id="@+id/homeToolBar"
         layout="@layout/toolbar" />
 
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/businessList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/homeToolBar"
+        app:recyclerClipToPadding="false"
+        app:layout_empty="@layout/empty_view"
+        app:layout_moreProgress="@layout/view_more_progress"
+        app:scrollbarStyle="outsideOverlay" >
+    </com.malinskiy.superrecyclerview.SuperRecyclerView>
+
 </RelativeLayout>

@@ -1,18 +1,45 @@
 package ng.codehaven.eko.ui.activities;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ng.codehaven.eko.R;
+import com.eowise.recyclerview.stickyheaders.StickyHeadersBuilder;
+import com.eowise.recyclerview.stickyheaders.StickyHeadersItemDecoration;
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.malinskiy.superrecyclerview.SwipeDismissRecyclerViewTouchListener;
 
-public class BusinessActivity extends ActionBarActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import ng.codehaven.eko.R;
+import ng.codehaven.eko.adapters.BusinessAdapter;
+import ng.codehaven.eko.adapters.RecyclerGridAdapter;
+import ng.codehaven.eko.models.mTransaction;
+import ng.codehaven.eko.ui.BaseToolbarActivity;
+
+public class BusinessActivity extends ActionBarActivity
+         {
+
+    @InjectView(R.id.homeToolBar) protected Toolbar mToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business);
+        ButterKnife.inject(this);
+        setSupportActionBar(mToolBar);
 
     }
 

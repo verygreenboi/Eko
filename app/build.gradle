@@ -12,8 +12,8 @@ android {
         versionName "1.1.6"
     }
 
-    signingConfigs{
-        releaseConfig{
+    signingConfigs {
+        releaseConfig {
             storeFile file('eko.jks');
             storePassword("Pabopovib234.");
             keyAlias("Eko-Key");
@@ -29,7 +29,7 @@ android {
             signingConfig signingConfigs.releaseConfig
             setApplicationIdSuffix(".release")
         }
-        debug{
+        debug {
             debuggable true
             setApplicationIdSuffix(".debug")
         }
@@ -42,9 +42,10 @@ dependencies {
     //    compile 'dev.dworks.libs:volleyplus:+'
     //    compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
 //    compile 'com.embarkmobile:zxing-android-legacy:2.0.0@aar'
-    compile 'com.android.support:appcompat-v7:21.0.2'
-    compile 'com.android.support:recyclerview-v7:21.0.2'
-    compile 'com.android.support:palette-v7:21.0.2'
+    //    compile 'com.malinskiy:superrecyclerview:1.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:recyclerview-v7:21.0.3'
+    compile 'com.android.support:palette-v7:21.0.3'
     compile 'com.mcxiaoke.volley:library:1.0.7'
     compile 'com.jakewharton:butterknife:5.1.1'
     compile 'com.wrapp.floatlabelededittext:library:0.0.5'
@@ -54,8 +55,8 @@ dependencies {
     compile 'com.google.zxing:android-core:3.1.0'
     compile 'com.google.zxing:android-integration:3.1.0'
     compile 'com.google.zxing:javase:3.1.0'
-    compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.android.support:support-v4:21.0.3'
     compile 'com.github.japgolly:svg-android:2.0.0'
     compile 'com.github.machinarius:preferencefragment:0.1.1'
-//    compile 'com.malinskiy:superrecyclerview:1.0.0'
+    compile 'com.eowise:recyclerview-stickyheaders:0.5.0@aar'
 }
