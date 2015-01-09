@@ -60,6 +60,11 @@ public class PurchaseFragment extends BaseListFragment {
     }
 
     @Override
+    protected int getAdapterType() {
+        return 0;
+    }
+
+    @Override
     protected JSONArray getTransactionArrays() throws JSONException {
         return mTransaction
                 .getTransactions(
@@ -75,5 +80,15 @@ public class PurchaseFragment extends BaseListFragment {
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getActivity());
+    }
+
+    @Override
+    protected boolean getOptionsMenuStatus() {
+        return false;
+    }
+
+    @Override
+    protected int getMenuResId() {
+        return 0;
     }
 }

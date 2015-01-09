@@ -80,5 +80,8 @@
     <string name="no_address">No known address</string>
     <string name="no_contact_selected">No contact selected</string>
     <string name="title_activity_business_details">BusinessDetailsActivity</string>
+    <string name="default_count">0</string>
+    <string name="refresh_message">Is refreshing</string>
+    <string name="add_business_menu_action">Add Business</string>
 
 </resources>

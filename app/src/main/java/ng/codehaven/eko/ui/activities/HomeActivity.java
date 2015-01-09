@@ -19,13 +19,10 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.ocpsoft.pretty.time.PrettyTime;
 import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

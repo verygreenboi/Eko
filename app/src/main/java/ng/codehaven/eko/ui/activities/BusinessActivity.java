@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.eowise.recyclerview.stickyheaders.StickyHeadersBuilder;
 import com.eowise.recyclerview.stickyheaders.StickyHeadersItemDecoration;
@@ -28,11 +29,16 @@ import ng.codehaven.eko.adapters.BusinessAdapter;
 import ng.codehaven.eko.adapters.RecyclerGridAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.BaseToolbarActivity;
+import ng.codehaven.eko.ui.fragments.BusinessFragment;
 
-public class BusinessActivity extends ActionBarActivity
-         {
+public class BusinessActivity extends ActionBarActivity {
 
-    @InjectView(R.id.homeToolBar) protected Toolbar mToolBar;
+    @InjectView(R.id.homeToolBar)
+    protected Toolbar mToolBar;
+    @InjectView(R.id.fragmentContainer)
+    protected FrameLayout mContainer;
+
+    protected BusinessFragment mFragment = new BusinessFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class BusinessActivity extends ActionBarActivity
         setContentView(R.layout.activity_business);
         ButterKnife.inject(this);
         setSupportActionBar(mToolBar);
-
+        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), mFragment).commit();
     }
 
 

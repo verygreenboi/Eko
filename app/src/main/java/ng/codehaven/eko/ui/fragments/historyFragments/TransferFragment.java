@@ -8,6 +8,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -58,6 +60,11 @@ public class TransferFragment extends BaseListFragment {
     }
 
     @Override
+    protected int getAdapterType() {
+        return 0;
+    }
+
+    @Override
     protected JSONArray getTransactionArrays() throws JSONException {
         return mTransaction
                 .getTransactions(
@@ -73,5 +80,15 @@ public class TransferFragment extends BaseListFragment {
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getActivity());
+    }
+
+    @Override
+    protected boolean getOptionsMenuStatus() {
+        return false;
+    }
+
+    @Override
+    protected int getMenuResId() {
+        return 0;
     }
 }

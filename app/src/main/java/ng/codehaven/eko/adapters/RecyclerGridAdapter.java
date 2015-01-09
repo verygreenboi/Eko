@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.BusinessDetailsActivity;
 import ng.codehaven.eko.ui.views.CustomTextView;
@@ -24,7 +25,6 @@ import ng.codehaven.eko.utils.IntentUtils;
  */
 public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapter.ViewHolder> {
 
-    public static final String BUSINESS_ID_KEY = "business_id";
     protected Context ctx;
     protected ArrayList<JSONObject> businesses;
     protected PrettyTime mPtime = new PrettyTime();
@@ -73,7 +73,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
                 IntentUtils.startActivityWithStringExtra(
                         ctx,
                         BusinessDetailsActivity.class,
-                        BUSINESS_ID_KEY,
+                        Constants.BUSINESS_ID_KEY,
                         mId.getText().toString().trim()
                 );
             }

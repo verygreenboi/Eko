@@ -5,9 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -19,7 +20,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ng.codehaven.eko.adapters.BusinessAdapter;
 import ng.codehaven.eko.adapters.HistoryItemsAdapter;
+import ng.codehaven.eko.utils.Logger;
 
 /**
  * Created by mrsmith on 12/20/14.
@@ -30,20 +33,27 @@ public abstract class BaseListFragment extends Fragment implements
         SwipeDismissRecyclerViewTouchListener.DismissCallbacks {
 
     protected SuperRecyclerView mRecycler;
-    protected HistoryItemsAdapter mAdapter;
+    protected HistoryItemsAdapter historyItemsAdapter;
+    protected BusinessAdapter businessAdapter;
     protected View v;
-    protected JSONArray transactions;
-    protected JSONArray mTXlist;
 
     private ArrayList<JSONObject> txList;
-    private JSONArray items;
 
     protected abstract boolean getDismissStatus();
     protected abstract int getRecyclerView();
     protected abstract int getLayout();
+    protected abstract int getAdapterType();
 
     protected abstract JSONArray getTransactionArrays() throws JSONException;
     protected abstract RecyclerView.LayoutManager getLayoutManager();
+    protected abstract boolean getOptionsMenuStatus();
+    protected abstract int getMenuResId();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(getOptionsMenuStatus());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,10 +64,9 @@ public abstract class BaseListFragment extends Fragment implements
         mRecycler.setLayoutManager(getLayoutManager());
 
         if (getDismissStatus()) mRecycler.setupSwipeToDismiss(this);
-//        mRecycler.setAdapter(mAdapter);
 
         try {
-            items = getTransactionArrays();
+            JSONArray items = getTransactionArrays();
             txList = new ArrayList<JSONObject>();
             for (int i = 0; i < items.length(); i++) {
                 JSONObject transaction = items.getJSONObject(i);
@@ -67,12 +76,24 @@ public abstract class BaseListFragment extends Fragment implements
             e.printStackTrace();
         }
 
-        mAdapter = new HistoryItemsAdapter(getActivity(), txList);
-        mRecycler.setAdapter(mAdapter);
-
-//        mRecycler.setOnClickListener(this);
+        if (getAdapterType() == 0) {
+            historyItemsAdapter = new HistoryItemsAdapter(getActivity(), txList, getAdapterType());
+            mRecycler.setAdapter(historyItemsAdapter);
+        }else {
+            businessAdapter = new BusinessAdapter(getActivity(), txList);
+            mRecycler.setAdapter(businessAdapter);
+            Logger.m("Using business adapter");
+        }
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (getOptionsMenuStatus()) {
+            inflater.inflate(getMenuResId(), menu);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**
@@ -96,7 +117,7 @@ public abstract class BaseListFragment extends Fragment implements
     @Override
     public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
         for (int position : reverseSortedPositions) {
-            mAdapter.removeViaSwipe(position);
+            historyItemsAdapter.removeViaSwipe(position);
         }
     }
 

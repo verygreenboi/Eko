@@ -10,16 +10,60 @@
         android:id="@+id/homeToolBar"
         layout="@layout/toolbar" />
 
-    <com.malinskiy.superrecyclerview.SuperRecyclerView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/businessList"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/homeToolBar"
-        app:recyclerClipToPadding="false"
-        app:layout_empty="@layout/empty_view"
-        app:layout_moreProgress="@layout/view_more_progress"
-        app:scrollbarStyle="outsideOverlay" >
-    </com.malinskiy.superrecyclerview.SuperRecyclerView>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/headerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+            // Header
+
+            <ng.codehaven.eko.ui.views.CustomTextView
+                android:id="@+id/businessCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:text="@string/default_count" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <ng.codehaven.eko.ui.views.CustomTextView
+                    android:id="@+id/businessCountOwned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ng.codehaven.eko.ui.views.CustomTextView
+                    android:id="@+id/businessCountEmployed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ng.codehaven.eko.ui.views.CustomTextView
+                    android:id="@+id/businessCountAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+    </LinearLayout>
 
 </RelativeLayout>

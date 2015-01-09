@@ -141,5 +141,25 @@
     <style name="quickContactBadgeStyle">
         <item name="android:background">@drawable/quickcontact_badge_small</item>
     </style>
+    <style name="businessItemTitle" parent="secondaryBodyTextViewStyleBase">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+    </style>
+
+    <style name="bodyTextViewStyle" parent="primaryBodyTextViewStyleBase">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+    <style name="bodyTextViewStyle2" parent="secondaryBodyTextViewStyleBase">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+    </style>
+
+    <style name="titleLargeTextViewStyle" parent="titleTextViewStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display3</item>
+    </style>
+    <style name="titleMediumTextViewStyle" parent="titleTextViewStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display2</item>
+    </style>
+    <style name="titleSmallTextViewStyle" parent="titleTextViewStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display1</item>
+    </style>
 
 </resources>

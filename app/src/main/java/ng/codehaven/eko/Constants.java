@@ -18,6 +18,7 @@ public class Constants {
     public static final int[] buildType = {0,1};
 
     public static final String ABC_FONT = "fonts/Armata-Regular.otf";
+    public static final String BUSINESS_ID_KEY = "business_id";
 
     public static final int NAVDRAWER_ITEM_REQUEST_FUNDS = 0;
     public static final int NAVDRAWER_ITEM_CASH_IN = 1;
