@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -23,38 +23,52 @@ import ng.codehaven.eko.ui.activities.BusinessDetailsActivity;
 import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.IntentUtils;
+import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.MD5Util;
+import ng.codehaven.eko.utils.UIUtils;
 import ng.codehaven.eko.utils.Utils;
 
 /**
  * Created by Thompson on 30/12/2014.
+ * Business Adapter
  */
 public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHolder> {
+
     protected ArrayList<JSONObject> businesses;
     protected Context ctx;
     protected ImageLoader imageLoader;
+    protected String mBusinessTitle;
 
-    public BusinessAdapter(Context c, ArrayList<JSONObject> businesses){
+    // Adapter constructor
+
+    public BusinessAdapter(Context c, ArrayList<JSONObject> businesses) {
         this.businesses = businesses;
         this.ctx = c;
         setHasStableIds(true);
         this.imageLoader = ImageCacheManager.getInstance().getImageLoader();
     }
 
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.business_item, parent, false);
-        return new ViewHolder(ctx, v);
+        return new ViewHolder(ctx, v, businesses);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         try {
-            viewHolder.mTitle.setText(businesses.get(i).getString("id"));
-            viewHolder.mImage.setImageUrl(getImageUrl(businesses.get(i).getString("id")), imageLoader);
+            mBusinessTitle = businesses.get(i).getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
+            mBusinessTitle = null;
         }
+        viewHolder.getmTitle().setText(mBusinessTitle);
+        viewHolder.getmImage().setDefaultImageResId(R.id.qrImageView);
+        viewHolder.getmImage().setErrorImageResId(R.id.qrImageView);
+        viewHolder.getmImage().setImageUrl(UIUtils.getImageUrl(mBusinessTitle, ctx), imageLoader);
+
     }
 
     @Override
@@ -62,53 +76,87 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         return businesses.size();
     }
 
-    private String getImageUrl(String id) {
-        String email;
-        String hash;
-        String url;
+    // Helper methods
 
-        if (BuildType.type == 0) {
-            email = "debug-"+ id+ "-" + Utils.IMEI(ctx) + "@eko.ng";
-        } else {
-            email = ParseUser.getCurrentUser().getEmail();
-        }
-
-        hash = MD5Util.md5Hex(email);
-
-        url = Constants.KEY_GRAVATAR_URL + hash+ "?d=identicon";
-
-        return url;
+    public void addBusiness(int position, JSONObject data) {
+        businesses.add(position, data);
+        notifyItemInserted(position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void removeBusiness(int position) {
+        businesses.remove(position);
+        notifyItemRemoved(position);
+    }
 
-        public NetworkImageView mImage;
-        public CustomTextView mTitle;
-        public TextView mId;
+    // ViewHolder Class
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private Context ctx;
 
+        public NetworkImageView mImage;
+        public CustomTextView mTitle;
+        public ImageView mSecondaryAction;
 
-        public ViewHolder( Context c, View itemView) {
+        private int position;
+        private String id;
+
+        private JSONObject business;
+        private ArrayList<JSONObject> businesses;
+
+        public NetworkImageView getmImage() {
+            return mImage;
+        }
+
+        public CustomTextView getmTitle() {
+            return mTitle;
+        }
+
+        public ImageView getmSecondaryAction() {
+            return mSecondaryAction;
+        }
+
+        public ViewHolder(Context c, View itemView, ArrayList<JSONObject> businesses) {
             super(itemView);
             this.ctx = c;
-            mImage = (NetworkImageView)itemView.findViewById(R.id.mBusinessLogo);
-            mTitle = (CustomTextView)itemView.findViewById(R.id.businessTitle);
-            mId = (TextView)itemView.findViewById(R.id.businessId);
-            itemView.setOnClickListener(this);
+            this.businesses = businesses;
+            mImage = (NetworkImageView) itemView.findViewById(R.id.mBusinessLogo);
+            mTitle = (CustomTextView) itemView.findViewById(R.id.businessTitle);
+            mSecondaryAction = (ImageView) itemView.findViewById(R.id.secondaryAction);
+
+            mSecondaryAction.setOnClickListener(this);
+            mImage.setOnClickListener(this);
+            mTitle.setOnClickListener(this);
         }
+
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.mBusinessLogo ||
-                    v.getId() == R.id.businessTitle) {
-                IntentUtils.startActivityWithStringExtra(
-                        ctx,
-                        BusinessDetailsActivity.class,
-                        Constants.BUSINESS_ID_KEY,
-                        mId.getText().toString().trim()
-                );
+            position = getPosition();
+            business = businesses.get(position);
+            try {
+                id = businesses.get(position).getString("id");
+                Logger.s(ctx, id);
+            } catch (JSONException e) {
+                id = null;
+                e.printStackTrace();
+            }
+            switch (v.getId()) {
+                case R.id.secondaryAction:
+                    // TODO: Show business edit functions
+                    break;
+                default:
+                    Logger.m(String.valueOf(v.getId()));
+                    IntentUtils.startActivityWithJSON(ctx, business, BusinessDetailsActivity.class);
+                    break;
             }
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
+        }
+
     }
+
 }

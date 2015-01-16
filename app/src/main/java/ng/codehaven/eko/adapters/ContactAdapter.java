@@ -14,6 +14,7 @@ import ng.codehaven.eko.models.Contact;
 
 /**
  * Created by Thompson on 09/01/2015.
+ * Contact adapter
  */
 public class ContactAdapter extends ArrayAdapter<Contact> {
     public ContactAdapter(Context context, ArrayList<Contact> contacts) {

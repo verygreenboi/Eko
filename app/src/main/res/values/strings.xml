@@ -83,5 +83,8 @@
     <string name="default_count">0</string>
     <string name="refresh_message">Is refreshing</string>
     <string name="add_business_menu_action">Add Business</string>
+    <string name="switch_label">Is this a Transport business?</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_user_logged_in_error_message">No user is logged in.</string>
 
 </resources>

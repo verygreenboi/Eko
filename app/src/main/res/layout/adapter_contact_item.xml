@@ -4,12 +4,19 @@
     android:padding="3dp"
     android:layout_height="match_parent">
 
+    <ng.codehaven.eko.ui.widgets.BezelImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/navdrawer_profile_image_size"
+        android:layout_height="@dimen/navdrawer_profile_image_size"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/profile_image"
+        android:layout_toEndOf="@+id/profile_image"
         android:text="Bob Marley"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
@@ -18,7 +25,8 @@
         android:id="@+id/tvPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@+id/profile_image"
+        android:layout_toEndOf="@+id/profile_image"
         android:layout_below="@+id/tvName"
         android:text="(567) 789-5889"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -31,8 +39,10 @@
         android:layout_alignBaseline="@+id/tvPhone"
         android:layout_alignBottom="@+id/tvPhone"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/tvPhone"
-        android:paddingLeft="5dp"
+        android:layout_toEndOf="@+id/tvPhone"
+        android:paddingLeft="8dp"
         android:text="bob@fake.com"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

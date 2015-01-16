@@ -1,19 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ng.codehaven.eko.ui.fragments.HistoryFragment">
 
+    <LinearLayout
+        android:id="@+id/topMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+        <ng.codehaven.eko.ui.views.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:textColor="@color/primary_text_default_material_dark"
+            android:layout_gravity="start"
+            style="@style/titleSmallTextViewStyle"
+            android:text="My Business"/>
+
+    </LinearLayout>
+
     <com.malinskiy.superrecyclerview.SuperRecyclerView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/businessList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
-        app:recyclerClipToPadding="false"
+        android:layout_below="@+id/topMeta"
         app:layout_empty="@layout/empty_view"
         app:layout_moreProgress="@layout/view_more_progress"
-        app:scrollbarStyle="outsideOverlay" >
-    </com.malinskiy.superrecyclerview.SuperRecyclerView>
+        app:recyclerClipToPadding="false"
+        app:scrollbarStyle="outsideOverlay" />
 
-</FrameLayout>
+</RelativeLayout>

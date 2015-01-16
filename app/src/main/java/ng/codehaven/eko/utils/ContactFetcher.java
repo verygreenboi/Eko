@@ -1,7 +1,9 @@
 package ng.codehaven.eko.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.content.CursorLoader;
 
@@ -40,14 +42,17 @@ public class ContactFetcher {
         return listContacts;
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private Contact loadContactData(Cursor c) {
         // Get Contact ID
         int idIndex = c.getColumnIndex(ContactsContract.Contacts._ID);
         String contactId = c.getString(idIndex);
         // Get Contact Name
         int nameIndex = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+        int photoThumbIndex = c.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
         String contactDisplayName = c.getString(nameIndex);
-        Contact contact = new Contact(contactId, contactDisplayName);
+        String contactPhotoThumb = c.getString(photoThumbIndex);
+        Contact contact = new Contact(contactId, contactDisplayName, contactPhotoThumb);
         fetchContactNumbers(c, contact);
         fetchContactEmails(c, contact);
         return contact;

@@ -70,6 +70,7 @@ public class Constants {
     // Parse.com Classes
 
     public static final String CLASS_TRANSACTIONS = "transactions";
+    public static final String CLASS_BUSINESSES = "businesses";
 
     /**
      * Transaction class objects
