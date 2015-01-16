@@ -31,8 +31,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:textColor="@color/primary_text_default_material_light"
-                android:maxLength="@integer/contact_detail_info_percent"
-                android:text="Test" />
+                android:maxLength="10"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="1234567890123456777676" />
 
             <ImageView
                 android:id="@+id/secondaryAction"

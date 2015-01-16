@@ -9,24 +9,19 @@ import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ng.codehaven.eko.BuildType;
-import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.BusinessDetailsActivity;
 import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
-import ng.codehaven.eko.utils.MD5Util;
 import ng.codehaven.eko.utils.UIUtils;
-import ng.codehaven.eko.utils.Utils;
 
 /**
  * Created by Thompson on 30/12/2014.
@@ -83,9 +78,21 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         notifyItemInserted(position);
     }
 
+    public void addAll(ArrayList<JSONObject> txList){
+        int startIndex = businesses.size();
+        businesses.addAll(startIndex, txList);
+        notifyItemRangeInserted(startIndex, txList.size());
+    }
+
     public void removeBusiness(int position) {
         businesses.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void clear(){
+        int size = businesses.size();
+        businesses.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     // ViewHolder Class

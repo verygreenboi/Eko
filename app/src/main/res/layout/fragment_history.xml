@@ -17,13 +17,20 @@
         <ng.codehaven.eko.ui.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_vertical_margin"
             android:textColor="@color/primary_text_default_material_dark"
             android:layout_gravity="start"
             style="@style/titleSmallTextViewStyle"
             android:text="My Business"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:background="@color/colorPrimaryAccent_1" />
 
     </LinearLayout>
 

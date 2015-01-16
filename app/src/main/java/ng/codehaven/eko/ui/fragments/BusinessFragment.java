@@ -3,7 +3,6 @@ package ng.codehaven.eko.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,10 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+import com.eowise.recyclerview.stickyheaders.StickyHeadersBuilder;
+import com.eowise.recyclerview.stickyheaders.StickyHeadersItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,9 +19,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ng.codehaven.eko.BuildType;
-import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.adapters.InitialHeaderAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.dialogFragments.AddBusinessFragment;
 import ng.codehaven.eko.utils.Logger;
@@ -34,6 +30,7 @@ import ng.codehaven.eko.utils.Logger;
  */
 public class BusinessFragment extends BaseListFragment  {
     private ArrayList<JSONObject> txList;
+    private StickyHeadersItemDecoration top;
 
 
     public BusinessFragment() {
@@ -92,6 +89,17 @@ public class BusinessFragment extends BaseListFragment  {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecycler.setRefreshListener(this);
+        mRecycler.setRefreshingColorResources(
+                R.color.md_orange_400,
+                R.color.md_blue_400,
+                R.color.md_green_400,
+                R.color.md_red_400);
+        top = new StickyHeadersBuilder().
+                setAdapter(businessAdapter).
+                setRecyclerView(mRecycler.getRecyclerView()).
+                setStickyHeadersAdapter(new InitialHeaderAdapter(txList)).build();
+
+//        mRecycler.addItemDecoration(top);
     }
 
     @Override
@@ -113,5 +121,24 @@ public class BusinessFragment extends BaseListFragment  {
     public void onRefresh() {
         super.onRefresh();
         Logger.s(getActivity(), getActivity().getString(R.string.refresh_message));
+        businessAdapter.clear();
+
+        try {
+            JSONArray items = getTransactionArrays();
+            txList = new ArrayList<JSONObject>();
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject transaction = items.getJSONObject(i);
+                txList.add(transaction);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        businessAdapter.addAll(txList);
+
+        if (mRecycler.getSwipeToRefresh().isRefreshing()){
+            mRecycler.getSwipeToRefresh().setRefreshing(false);
+        }
+
     }
 }
