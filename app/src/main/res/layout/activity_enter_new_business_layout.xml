@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/homeToolBar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="288dp"
+                android:background="@color/colorPrimary">
+
+                <ng.codehaven.eko.ui.widgets.RoundedImageView
+                    android:id="@+id/businessLogo"
+                    android:layout_width="184dp"
+                    android:layout_height="184dp"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/person_image_empty"
+                    app:maskDrawable="@drawable/circle_mask"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginStart="56dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Business Name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="@dimen/abc_text_size_medium_material" />
+
+                <EditText
+                    android:id="@+id/businessTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:inputType="textCapWords"
+                    android:maxLines="3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textSize="@dimen/abc_text_size_large_material" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginStart="56dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Phone Number"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="@dimen/abc_text_size_medium_material" />
+
+                <EditText
+                    android:id="@+id/businessPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:inputType="phone"
+                    android:maxLines="3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="@dimen/abc_text_size_large_material" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginStart="56dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Business Address"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="@dimen/abc_text_size_medium_material" />
+
+                <EditText
+                    android:id="@+id/businessAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="@dimen/abc_text_size_large_material" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="56dp"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginStart="56dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Is this a Transport Business?" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/transportSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/createBusinessBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="?android:buttonBarButtonStyle"
+                android:enabled="false"
+                android:text="Create business"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

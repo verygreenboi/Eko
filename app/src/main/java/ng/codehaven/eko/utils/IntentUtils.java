@@ -36,6 +36,11 @@ public class IntentUtils {
         ctx.startActivity(i);
     }
 
+    public static void sendBroadcast(Context ctx, String intentFilter){
+        i = new Intent(intentFilter);
+        ctx.sendBroadcast(i);
+    }
+
     public static void logout(Context ctx){
         ParseUser.logOut();
         mCurrentUser = ParseUser.getCurrentUser();

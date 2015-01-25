@@ -7,17 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.adapters.HistoryItemsAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.BaseListFragment;
 import ng.codehaven.eko.utils.Logger;
@@ -28,6 +25,8 @@ import ng.codehaven.eko.utils.Logger;
 public class TransferFragment extends BaseListFragment {
 
 
+    private HistoryItemsAdapter mAdapter;
+
     public TransferFragment() {
         // Required empty public constructor
     }
@@ -35,6 +34,8 @@ public class TransferFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAdapter = new HistoryItemsAdapter(getActivity(), txList);
+        mRecycler.setAdapter(mAdapter);
         mRecycler.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -57,11 +58,6 @@ public class TransferFragment extends BaseListFragment {
     @Override
     protected int getLayout() {
         return R.layout.fragment_transfer;
-    }
-
-    @Override
-    protected int getAdapterType() {
-        return 0;
     }
 
     @Override

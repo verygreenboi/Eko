@@ -8,6 +8,7 @@ public class Constants {
 
     public static final String KEY_USER = "_user";
     public static final String KEY_USER_ID = "userId";
+    public static String KEY_BUSINESS_ACCOUNT_HOLDERS_RELATION = "businessAccountHolders";
 
     public enum flavorType{
         USER, AGENT, ADMIN
@@ -55,6 +56,8 @@ public class Constants {
             "\n" +
             "body {font-family: 'feast';}";
 
+    public static final String TYPE_IMAGE = "image";
+
 
 
     public static final String KEY_GRAVATAR_URL = "http://www.gravatar.com/avatar/";
@@ -71,6 +74,9 @@ public class Constants {
 
     public static final String CLASS_TRANSACTIONS = "transactions";
     public static final String CLASS_BUSINESSES = "businesses";
+
+    // Parse.com fields
+    public static final String KEY_ACCOUNT_HOLDERS_RELATION = "accountHolders";
 
     /**
      * Transaction class objects

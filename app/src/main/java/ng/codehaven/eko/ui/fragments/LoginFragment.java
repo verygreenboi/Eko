@@ -11,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
@@ -28,7 +26,7 @@ import ng.codehaven.eko.utils.IntentUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements View.OnClickListener{
 
     public final static String EXTRA_MESSAGE = "ng.codehaven.eko.QR_DATA";
 
@@ -51,6 +49,8 @@ public class LoginFragment extends Fragment {
     Button scanButton;
     ImageScanner scanner;
 
+    DoScanQR handler;
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-//        Logger.s(getActivity(), TAG + " onAttach");
+        handler = (DoScanQR) getActivity();
 
     }
 
@@ -79,38 +79,27 @@ public class LoginFragment extends Fragment {
 //        Logger.s(getActivity(), TAG + " onResume");
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        autoFocusHandler = new Handler();
-        mCamera = getCameraInstance();
-
-        /* Instance barcode scanner */
-        scanner = new ImageScanner();
-        scanner.setConfig(0, Config.X_DENSITY, 3);
-        scanner.setConfig(0, Config.Y_DENSITY, 3);
-
-        mPreview = new CameraPreview(getActivity(), mCamera, previewCb, autoFocusCB);
-        final FrameLayout preview = (FrameLayout) v.findViewById(R.id.cameraPreview);
+//        autoFocusHandler = new Handler();
+//        mCamera = getCameraInstance();
+//
+//        /* Instance barcode scanner */
+//        scanner = new ImageScanner();
+//        scanner.setConfig(0, Config.X_DENSITY, 3);
+//        scanner.setConfig(0, Config.Y_DENSITY, 3);
+//
+//        mPreview = new CameraPreview(getActivity(), mCamera, previewCb, autoFocusCB);
+//        final FrameLayout preview = (FrameLayout) v.findViewById(R.id.cameraPreview);
         scanText = (TextView) v.findViewById(R.id.scanText);
 
         scanButton = (Button) v.findViewById(R.id.ScanButton);
         if (isPreviewAllowed) {
-            preview.addView(mPreview);
+//            preview.addView(mPreview);
         } else {
             scanText.setVisibility(View.INVISIBLE);
         }
 
 
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (isPreviewAllowed) {
-                    doScan();
-                } else {
-                    isPreviewAllowed = true;
-                    preview.addView(mPreview);
-                    scanText.setVisibility(View.VISIBLE);
-                    doScan();
-                }
-            }
-        });
+        scanButton.setOnClickListener(this);
     }
 
     @Override
@@ -196,5 +185,21 @@ public class LoginFragment extends Fragment {
             previewing = true;
             mCamera.autoFocus(autoFocusCB);
         }
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.ScanButton){
+            handler.doScan(v);
+        }
+    }
+
+    public interface DoScanQR{
+        public void doScan(View v);
     }
 }

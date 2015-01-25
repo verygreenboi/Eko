@@ -14,6 +14,7 @@ import org.json.JSONException;
 
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.adapters.HistoryItemsAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.BaseListFragment;
 import ng.codehaven.eko.utils.Logger;
@@ -24,6 +25,8 @@ import ng.codehaven.eko.utils.Logger;
 public class TicketsFragment extends BaseListFragment {
 
 
+    private HistoryItemsAdapter mAdapter;
+
     public TicketsFragment() {
         // Required empty public constructor
     }
@@ -31,6 +34,8 @@ public class TicketsFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAdapter = new HistoryItemsAdapter(getActivity(), txList);
+        mRecycler.setAdapter(mAdapter);
         mRecycler.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -53,11 +58,6 @@ public class TicketsFragment extends BaseListFragment {
     @Override
     protected int getLayout() {
         return R.layout.fragment_tickets;
-    }
-
-    @Override
-    protected int getAdapterType() {
-        return 0;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ng.codehaven.eko.utils;
+package ng.codehaven.eko.helpers;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.utils.FontCache;
 
 /**
  * Created by mrsmith on 11/19/14.

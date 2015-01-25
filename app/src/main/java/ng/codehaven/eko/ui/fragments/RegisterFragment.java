@@ -18,10 +18,14 @@ import com.mobsandgeeks.saripaar.annotation.Required;
 import com.mobsandgeeks.saripaar.annotation.TextRule;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import ng.codehaven.eko.Application;
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.HomeActivity;
 import ng.codehaven.eko.utils.IntentUtils;
@@ -111,7 +115,7 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
             psword = password.getText().toString().trim();
             String phone = phoneNumber.getText().toString().trim();
 
-            ParseUser newUser = new ParseUser();
+            final ParseUser newUser = new ParseUser();
             newUser.setUsername(userId);
             newUser.setEmail(email);
             newUser.setPassword(psword);
@@ -124,7 +128,20 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
                 @Override
                 public void done(ParseException e) {
                     if (e ==null){
-                        doSignIn();
+                        ParseRelation<ParseUser> mUserRelation;
+                        ParseObject mAccount = new ParseObject("Accounts");
+                        mAccount.put("type", Constants.KEY_QR_TYPE_PERSONAL);
+                        mAccount.put("currentBalance", 0);
+                        mAccount.put("active", true);
+                        mUserRelation= mAccount.getRelation(Constants.KEY_ACCOUNT_HOLDERS_RELATION);
+                        mUserRelation.add(newUser);
+                        mAccount.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                doSignIn();
+                            }
+                        });
+
                     }else{
                         switch (e.getCode()){
                             case ParseException.CONNECTION_FAILED:

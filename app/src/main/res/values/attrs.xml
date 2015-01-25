@@ -10,6 +10,12 @@
         <attr name="desaturateOnPress" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RoundedImageView">
+        <attr name="RmaskDrawable" format="reference" />
+        <attr name="RborderDrawable" format="reference" />
+        <attr name="RdesaturateOnPress" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="BaseTheme">
         <attr name="popupItemBackground" format="reference" />
         <attr name="photoItemForeground" format="reference" />

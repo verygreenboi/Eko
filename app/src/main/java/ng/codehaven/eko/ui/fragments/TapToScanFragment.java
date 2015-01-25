@@ -1,11 +1,10 @@
 package ng.codehaven.eko.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +15,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.zxing.WriterException;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import ng.codehaven.eko.R;
-import ng.codehaven.eko.ui.activities.HomeActivity;
-import ng.codehaven.eko.utils.FontCache;
+import ng.codehaven.eko.helpers.QRCodeHelper;
 import ng.codehaven.eko.utils.Logger;
-import ng.codehaven.eko.utils.QRCodeHelper;
 
 /**
  * Created by mrsmith on 11/26/14.
  */
-public class TapToScanFragment extends Fragment {
-    private static final int RESULT_OK = 1;
-    private static final int RESULT_CANCELED = 0;
+public class TapToScanFragment extends Fragment implements View.OnClickListener {
     Context ctx;
     Bundle user;
     ImageView qrImageView;
@@ -41,6 +35,8 @@ public class TapToScanFragment extends Fragment {
             moveAnimation,
             fadeOutAnimation,
             mvAnim;
+
+    ScanClickHandler mHandler;
 
     public TapToScanFragment() {
     }
@@ -66,20 +62,20 @@ public class TapToScanFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         String data = user.getString("userQR");
-        Logger.m("FROM BUNDLE --> "+data);
-//        tapToScanTextView = (CustomTextView) v.findViewById(R.id.tapToScanTextView);
+        Logger.m(data);
         tapCameraPreview = (FrameLayout) v.findViewById(R.id.tapCameraPreview);
         mScanButton = (Button)v.findViewById(R.id.ScanButton);
+        mScanButton.setVisibility(View.GONE);
 
-        mScanButton.setTypeface(FontCache.get("fonts/Roboto-Medium.ttf", getActivity()));
-        mScanButton.setTextColor(getResources().getColor(R.color.primary_text_default_material_dark));
+//        mScanButton.setTypeface(FontCache.get("fonts/Roboto-Medium.ttf", getActivity()));
+//        mScanButton.setTextColor(getResources().getColor(R.color.primary_text_default_material_dark));
 
         try {
             Bitmap qrBitmap = QRCodeHelper.generateQRCode(
                     data,
                     getActivity(),
-                    android.R.color.white,
-                    R.color.colorPrimary,
+                    R.color.colorPrimaryDark,
+                    R.color.background_material_light,
                     240,
                     240
             );
@@ -89,13 +85,16 @@ public class TapToScanFragment extends Fragment {
             e.printStackTrace();
         }
 
-        qrImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearOutViewsAnimations();
+//        qrImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                clearOutViewsAnimations();
+//
+//            }
+//        });
 
-            }
-        });
+        qrImageView.setOnClickListener(this);
+
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,48 +102,29 @@ public class TapToScanFragment extends Fragment {
             }
         });
 
-//        tapToScanTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                clearOutViewsAnimations();
-//            }
-//        });
-
         return v;
     }
-
-
-
-
     private void clearOutViewsAnimations() {
-//        qrImageView.startAnimation(fadeOutAnimation());
         qrImageView.setVisibility(View.GONE);
-//        tapToScanTextView.startAnimation(moveAnimation());
-//        tapToScanTextView.setVisibility(View.GONE);
         tapCameraPreview.setVisibility(View.VISIBLE);
-
-
-        Intent i = new Intent(HomeActivity.SCANNER_INTENT_FILTER);
-        ctx.sendBroadcast(i);
-
-//        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-//        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-//        startActivityForResult(intent, 0);
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(500);
-//
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
-    public interface onViewsClicked {
-        public void onClicked(int view);
+    @Override
+    public void onClick(View v) {
+        mHandler.onScanClickHandler(v);
+    }
+
+    public interface ScanClickHandler{
+        public void onScanClickHandler(View v);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mHandler = (ScanClickHandler) getActivity();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
     }
 }

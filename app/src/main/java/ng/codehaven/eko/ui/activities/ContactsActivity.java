@@ -3,6 +3,7 @@ package ng.codehaven.eko.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -24,7 +25,8 @@ public class ContactsActivity extends ActionBarActivity implements
 
     private ContactDetailFragment mContactDetailFragment;
 
-    @InjectView(R.id.homeToolBar) protected Toolbar mToolBar;
+    @InjectView(R.id.homeToolBar)
+    protected Toolbar mToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,9 @@ public class ContactsActivity extends ActionBarActivity implements
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolBar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.app_name);
 
 
     }
@@ -64,9 +69,12 @@ public class ContactsActivity extends ActionBarActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

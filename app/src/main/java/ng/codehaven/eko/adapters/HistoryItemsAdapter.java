@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.ocpsoft.pretty.time.PrettyTime;
-import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,17 +16,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
-import ng.codehaven.eko.BuildType;
-import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.TransactionDetailActivity;
 import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.ui.widgets.BezelImageView;
 import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.IntentUtils;
-import ng.codehaven.eko.utils.Logger;
-import ng.codehaven.eko.utils.MD5Util;
-import ng.codehaven.eko.utils.Utils;
 
 /**
  * Created by mrsmith on 12/20/14.
@@ -43,36 +37,15 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
 
     protected Context ctx;
 
-    protected int mLayoutType;
-
     protected PrettyTime mPtime = new PrettyTime();
 
     private boolean isEmpty;
 
     ImageLoader imageLoader;
 
-    private int setLayoutId() {
-        int layoutId = 0;
-        if (!isEmpty) {
-            switch (mLayoutType) {
-                case 0:
-                    layoutId = R.layout.transaction_item;
-                    break;
-                case 1:
-                    layoutId = R.layout.business_item;
-                    break;
-            }
-        } else {
-            layoutId = R.layout.empty_view;
-        }
-        Logger.m(String.valueOf(mLayoutType) + " " + String.valueOf(layoutId));
-        return layoutId;
-    }
-
-    public HistoryItemsAdapter(Context context, ArrayList<JSONObject> transactions, int layoutType) {
+    public HistoryItemsAdapter(Context context, ArrayList<JSONObject> transactions) {
         this.transactions = transactions;
         this.ctx = context;
-        this.mLayoutType = layoutType;
         setHasStableIds(true);
         this.isEmpty = transactions.isEmpty();
         this.imageLoader = ImageCacheManager.getInstance().getImageLoader();
@@ -80,8 +53,8 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(setLayoutId(), parent, false);
-        return new ViewHolder(ctx, v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.transaction_item, parent, false);
+        return new ViewHolder(ctx, v, transactions);
     }
 
     @Override
@@ -94,38 +67,8 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            switch (setLayoutId()) {
-                case 0:
-                    setupHistoryFields(holder);
-                    break;
-                case 1:
-                    setupBusinessFields(holder, position);
-                    break;
-            }
+            setupHistoryFields(holder);
         }
-
-    }
-
-    private void setupBusinessFields(ViewHolder holder, int position) {
-        String email;
-
-        if (BuildType.type == 0) {
-            email = "debug-" + Utils.IMEI(ctx) + "@eko.ng";
-        } else {
-            email = ParseUser.getCurrentUser().getEmail();
-        }
-
-        holder.mBusinessLogo.setImageUrl(
-                Constants.KEY_GRAVATAR_URL
-                        + MD5Util.md5Hex(email)
-                        + "?d=identicon",
-                imageLoader
-        );
-
-        holder.businessTitle.setText("Test " +String.valueOf(position));
-
-        Logger.s(ctx, "business item");
-
 
     }
 
@@ -175,10 +118,11 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
                 businessTitle;
 
         private Context context;
+        private ArrayList<JSONObject> transactions;
 
         public NetworkImageView mBusinessLogo;
 
-        public ViewHolder(Context context, View itemView) {
+        public ViewHolder(Context context, View itemView, ArrayList<JSONObject> transactions) {
             super(itemView);
             businessTitle = (CustomTextView) itemView.findViewById(R.id.businessTitle);
             mBusinessLogo = (NetworkImageView) itemView.findViewById(R.id.mBusinessLogo);
@@ -187,21 +131,15 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
             resolution = (CustomTextView) itemView.findViewById(R.id.resolution);
             image = (BezelImageView) itemView.findViewById(R.id.logo);
 
-            itemView.setOnClickListener(this);
-
+            this.transactions = transactions;
             this.context = context;
+            itemView.setOnClickListener(this);
         }
 
 
         @Override
         public void onClick(View view) {
-            IntentUtils
-                    .startActivityWithStringExtra(
-                            context,
-                            TransactionDetailActivity.class,
-                            "id",
-                            objId.getText().toString()
-                    );
+            IntentUtils.startActivityWithJSON(context, transactions.get(getPosition()), TransactionDetailActivity.class);
         }
     }
 }

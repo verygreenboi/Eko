@@ -79,9 +79,9 @@ public class RequestFundsActivity extends ActionBarActivity {
             showDone();
         }
 
-        if (BuildType.type == 0){
+        if (BuildType.type == 0) {
             mUserId = "debug";
-        }else {
+        } else {
             mUserId = mCurrentUser.getObjectId();
         }
 
@@ -194,7 +194,7 @@ public class RequestFundsActivity extends ActionBarActivity {
 
     private void saveTransaction(String amount, int type) {
         mTransaction transaction = new mTransaction(
-                mUserId+"-"+String.valueOf(TimeUtils.getCurrentTime()),
+                mUserId + "-" + String.valueOf(TimeUtils.getCurrentTime()),
                 mUserId,
                 "agent",
                 type,

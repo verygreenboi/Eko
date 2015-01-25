@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -28,6 +29,8 @@ import ng.codehaven.eko.utils.UIUtils;
  * Business Adapter
  */
 public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHolder> {
+
+    public static final String ADD_BUSINESS_INTENT = "ng.codehaven.eko.ADD_BUSINESS";
 
     protected ArrayList<JSONObject> businesses;
     protected Context ctx;
@@ -104,6 +107,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         public NetworkImageView mImage;
         public CustomTextView mTitle;
         public ImageView mSecondaryAction;
+        public Button mAddBusiness;
 
         private int position;
         private String id;
@@ -132,6 +136,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             mSecondaryAction = (ImageView) itemView.findViewById(R.id.secondaryAction);
 
             mSecondaryAction.setOnClickListener(this);
+            mAddBusiness.setOnClickListener(this);
             mImage.setOnClickListener(this);
             mTitle.setOnClickListener(this);
         }

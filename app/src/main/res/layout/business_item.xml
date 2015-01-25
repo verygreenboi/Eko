@@ -18,34 +18,35 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:paddingLeft="8dp"
             android:paddingRight="8dp">
 
             <ng.codehaven.eko.ui.views.CustomTextView
                 android:id="@+id/businessTitle"
                 style="@style/businessItemTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
                 android:textColor="@color/primary_text_default_material_light"
-                android:maxLength="10"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="1234567890123456777676" />
+                android:maxLines="2"
+                android:textSize="28sp"
+                android:text="123456789012345dddfefeefef" />
 
             <ImageView
                 android:id="@+id/secondaryAction"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:padding="8dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_settings_black"/>
-        </RelativeLayout>
+                android:src="@drawable/ic_settings_black"
+                android:contentDescription="@string/sec_action_image" />
+        </LinearLayout>
 
 
     </LinearLayout>

@@ -1,6 +1,7 @@
 package ng.codehaven.eko.ui.activities;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,8 +26,10 @@ import ng.codehaven.eko.ui.fragments.IntroAFragment;
 import ng.codehaven.eko.ui.fragments.IntroBFragment;
 import ng.codehaven.eko.ui.fragments.IntroCFragment;
 import ng.codehaven.eko.ui.fragments.LoginFragment;
+import ng.codehaven.eko.utils.IntentUtils;
+import ng.codehaven.eko.utils.UIUtils;
 
-public class AuthActivity extends ActionBarActivity {
+public class AuthActivity extends ActionBarActivity implements LoginFragment.DoScanQR {
 
     @InjectView(R.id.authViewPager)
     protected ViewPager mViewPager;
@@ -169,6 +172,31 @@ public class AuthActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void doScan(View v) {
+        if (v.getId() == R.id.ScanButton) {
+            Intent i = new Intent("com.google.zxing.client.android.SCAN");
+            i.putExtra("SCAN_MODE", "QR_CODE_MODE");
+            startActivityForResult(i, 2204);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2204) {
+            if (resultCode == RESULT_OK) {
+                Bundle b = data.getExtras();
+                String qrURL = UIUtils.unescape(b.getString("qrData"));
+
+                IntentUtils.startActivityWithStringExtra(this,
+                        RegisterLoginActivity.class,
+                        LoginFragment.EXTRA_MESSAGE,
+                        qrURL);
+            }
+        }
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {

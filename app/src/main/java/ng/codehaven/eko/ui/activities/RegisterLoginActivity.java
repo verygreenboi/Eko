@@ -18,18 +18,16 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.helpers.QRCodeHelper;
 import ng.codehaven.eko.ui.fragments.LoginFragment;
 import ng.codehaven.eko.ui.fragments.RegisterFragment;
 import ng.codehaven.eko.ui.fragments.SignInFragment;
 import ng.codehaven.eko.utils.Logger;
-import ng.codehaven.eko.utils.QRCodeHelper;
 
 public class RegisterLoginActivity extends ActionBarActivity {
 
@@ -79,57 +77,35 @@ public class RegisterLoginActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         final String qrData = intent.getStringExtra(LoginFragment.EXTRA_MESSAGE);
-
-        try {
-            mQRData = new JSONObject(qrData);
-            mIsQRValid = QRCodeHelper.isValidQRCode(mQRData);
-
-            if (mIsQRValid) {
-                mQRType = QRCodeHelper.getQRType(mQRData);
-
-                if (mQRType != 0) {
-                    errorType = 0;
-                    doQRError(errorType);
-                } else {
-
-                    user = mQRData.getString(Constants.KEY_QR_TYPE);
-                }
+        Logger.s(this, qrData);
 
 
+        mIsQRValid = QRCodeHelper.isValidQRCode(qrData);
+
+        if (mIsQRValid) {
+            mQRType = QRCodeHelper.getQRType(qrData);
+
+            if (mQRType != 0) {
+                errorType = 0;
+                doQRError(errorType);
             } else {
-                doQRError(1);
-                Logger.s(RegisterLoginActivity.this, "QR Code is invalid");
+
+                user = QRCodeHelper.getSecondSplitArray(qrData)[1];
+                Logger.s(this, user);
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+        } else {
+            doQRError(1);
+            Logger.s(RegisterLoginActivity.this, "QR Code is invalid");
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // If fragment is saved, load fragment
-        prefs = getSharedPreferences(prefName, MODE_PRIVATE);
 
-        if (prefs.contains("fragment")) {
-            mFragment = prefs.getInt("fragment", -1);
-            user = prefs.getString(Constants.KEY_USER, null);
-            userId = new Bundle();
-            userId.putString("user_id", user);
-            switch (mFragment) {
-                case 1:
-                    login(userId);
-                    break;
-                case 2:
-                    createNewAccount(userId);
-                    break;
-                default:
-
-                    break;
-
-            }
-        } else {
+        if (user != null) {
             doQuery(user);
 
             mRetryBtn.setOnClickListener(new View.OnClickListener() {
@@ -142,20 +118,15 @@ public class RegisterLoginActivity extends ActionBarActivity {
                     doQuery(user);
                 }
             });
+        } else {
+            Logger.s(this, getString(R.string.general_error_message_txt));
+            finish();
         }
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // Save fragment state
-
-        prefs = getSharedPreferences(prefName, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("fragment", mFragment);
-        editor.putString(Constants.KEY_USER, user);
-        editor.apply();
 
     }
 
@@ -179,7 +150,7 @@ public class RegisterLoginActivity extends ActionBarActivity {
                         mPreview.setTextColor(getResources().getColor(R.color.color_orange));
                         mRetryBtn.setEnabled(true);
                     } else if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                        Logger.s(ctx, "Create new account");
+                        Logger.s(ctx, mUser);
                         createNewAccount(userId);
                     }
                 } else {

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.google.zxing.WriterException;
 
 import ng.codehaven.eko.R;
-import ng.codehaven.eko.utils.QRCodeHelper;
+import ng.codehaven.eko.helpers.QRCodeHelper;
 
 /**
  * A simple {@link Fragment} subclass.

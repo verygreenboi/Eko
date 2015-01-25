@@ -1,16 +1,11 @@
 package ng.codehaven.eko.ui.activities;
 
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +14,10 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.json.JSONException;
@@ -27,9 +26,10 @@ import org.json.JSONObject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ng.codehaven.eko.BuildType;
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.helpers.QRCodeHelper;
 import ng.codehaven.eko.ui.BaseToolbarActivity;
-import ng.codehaven.eko.ui.fragments.ScanFragment;
 import ng.codehaven.eko.ui.fragments.TapToScanFragment;
 import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.ui.widgets.BezelImageView;
@@ -38,6 +38,7 @@ import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.MD5Util;
+import ng.codehaven.eko.utils.UIUtils;
 import ng.codehaven.eko.utils.Utils;
 
 import static ng.codehaven.eko.Constants.ABC_FONT;
@@ -48,8 +49,7 @@ import static ng.codehaven.eko.Constants.KEY_QR_TYPE_PERSONAL;
 
 public class HomeActivity extends BaseToolbarActivity implements
         BaseToolbarActivity.onListItemClickListener,
-        AdapterView.OnItemClickListener,
-        TapToScanFragment.onViewsClicked {
+        AdapterView.OnItemClickListener, TapToScanFragment.ScanClickHandler {
 
     @InjectView(R.id.homeToolBar)
     protected Toolbar mToolbar;
@@ -65,66 +65,15 @@ public class HomeActivity extends BaseToolbarActivity implements
 
 
     String email, hash, username, fullname;
-
-    private int position;
-    private int fragment = -1;
     ImageLoader mImageLoader;
 
     Fragment tapToScanFragment;
-
-    SharedPreferences prefs;
-    String prefName = "mCurrentFragment";
 
     Bundle user;
 
     private ParseUser mCurrentUser = ParseUser.getCurrentUser();
 
     onListItemClickListener handler;
-
-    TapToScanFragment.onViewsClicked viewClickHandler;
-
-    boolean mFragmentTransactionReceiverRegistered,
-            isScanFragmentLoaded,
-            isHomeReceiverRegistered;
-
-    public static final String SCANNER_INTENT_FILTER = "ng.codehaven.eko_SCANNER_INTENT_FILTER";
-    public static final String HOME_FRAGMENT_INTENT_FILTER = "ng.codehaven.eko_HOME_FRAGMENT_INTENT_FILTER";
-
-    private final BroadcastReceiver mScanFragmentTransactionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            loadScanFragment();
-            intent = new Intent("com.google.zxing.client.android.SCAN");
-            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-            startActivityForResult(intent, 0);
-        }
-    };
-
-    public final BroadcastReceiver mHomeFragmentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (tapToScanFragment != null) {
-                loadHomeFragment(username);
-                defaultToolBarState();
-            }
-        }
-    };
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-                // Handle successful scan
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-                Log.i("App", "Scan unsuccessful");
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +84,7 @@ public class HomeActivity extends BaseToolbarActivity implements
 
         if (BuildType.type == 0) {
             fullname = "Debug Man";
-            email = "debug-"+ Utils.IMEI(this)+"@eko.ng";
+            email = "debug-" + Utils.IMEI(this) + "@eko.ng";
             hash = MD5Util.md5Hex(email);
             username = "debug";
             init(email, hash, fullname, username);
@@ -157,44 +106,12 @@ public class HomeActivity extends BaseToolbarActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (!mFragmentTransactionReceiverRegistered) {
-            registerReceiver(mScanFragmentTransactionReceiver, new IntentFilter(SCANNER_INTENT_FILTER));
-            mFragmentTransactionReceiverRegistered = true;
-        }
-
-        if (!isHomeReceiverRegistered) {
-            registerReceiver(mHomeFragmentReceiver, new IntentFilter(HOME_FRAGMENT_INTENT_FILTER));
-            isHomeReceiverRegistered = true;
-        } else {
-            altToolBarState();
-        }
-
-        prefs = getSharedPreferences(prefName, MODE_PRIVATE);
-
-        if (prefs.contains("mCurrentFragment")){
-            fragment = prefs.getInt("mCurrentFragment", -1);
-        }
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (mFragmentTransactionReceiverRegistered) {
-            unregisterReceiver(mScanFragmentTransactionReceiver);
-            mFragmentTransactionReceiverRegistered = false;
-        }
-        if (isHomeReceiverRegistered) {
-            unregisterReceiver(mHomeFragmentReceiver);
-            isHomeReceiverRegistered = false;
-        }
-
-        if (fragment != -1){
-            prefs = getSharedPreferences(prefName, MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("mCurrentFragment", fragment).apply();
-        }
     }
 
     /**
@@ -211,12 +128,6 @@ public class HomeActivity extends BaseToolbarActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
         switch (id) {
             case R.id.action_settings:
                 IntentUtils.startActivity(HomeActivity.this, SettingsActivity.class);
@@ -269,7 +180,7 @@ public class HomeActivity extends BaseToolbarActivity implements
                 intent = new Intent(this, SettingsActivity.class);
                 break;
             default:
-                Logger.s(this, String.valueOf(position));
+                Logger.m(String.valueOf(position));
                 break;
         }
         if (intent != null) {
@@ -286,9 +197,6 @@ public class HomeActivity extends BaseToolbarActivity implements
             e.printStackTrace();
         }
 
-//        String email = mCurrentUser.getEmail();
-//        String hash = MD5Util.md5Hex(email);
-
         mImageLoader = ImageCacheManager.getInstance().getImageLoader();
 
         mProfileImage.setImageUrl(
@@ -300,14 +208,12 @@ public class HomeActivity extends BaseToolbarActivity implements
         mProfileEmail.setText(email);
         mProfileEmail.setTextColor(getResources().getColor(R.color.secondary_text_default_material_dark));
 
-//        mToolbar.setTitle(getString(R.string.app_name));
-
         TextView mToolBarTitle = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         mToolBarTitle.setTypeface(FontCache.get(ABC_FONT, HomeActivity.this));
 
         if (BuildType.type == 0) {
             mToolBarTitle.setText("Eko");
-        }else {
+        } else {
             mToolBarTitle.setText(getString(R.string.app_name));
         }
 
@@ -320,7 +226,13 @@ public class HomeActivity extends BaseToolbarActivity implements
         user = new Bundle();
         JSONObject qrObject = new JSONObject();
         JSONObject userObject = new JSONObject();
-        String qrData = KEY_QR_TYPE_PERSONAL+","+username;
+        String qrData = "http://eko.ng/" + KEY_QR_TYPE_PERSONAL + "/" + username;
+
+
+        String[] firstSplit = qrData.split("http://eko.ng/");
+
+        Logger.m(String.valueOf(firstSplit[1]));
+
         user.putString("userQR", qrData);
         try {
             qrObject.put(KEY_QR_TYPE, KEY_QR_TYPE_PERSONAL);
@@ -330,8 +242,6 @@ public class HomeActivity extends BaseToolbarActivity implements
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        fragment = 0;
         tapToScanFragment = new TapToScanFragment();
 
         tapToScanFragment.setArguments(user);
@@ -340,18 +250,6 @@ public class HomeActivity extends BaseToolbarActivity implements
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, tapToScanFragment)
                 .commit();
-    }
-
-
-    private void loadScanFragment() {
-        isScanFragmentLoaded = true;
-        fragment = 1;
-        Fragment scanFragment = new ScanFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, scanFragment)
-                .commit();
-        altToolBarState();
     }
 
     private void defaultToolBarState() {
@@ -365,19 +263,6 @@ public class HomeActivity extends BaseToolbarActivity implements
         });
     }
 
-    private void altToolBarState() {
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isScanFragmentLoaded = false;
-                Intent i = new Intent(HomeActivity.this, HomeActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-    }
-
     private void navigateToLogin() {
         Intent i = new Intent(HomeActivity.this, AuthActivity.class);
         startActivity(i);
@@ -385,9 +270,128 @@ public class HomeActivity extends BaseToolbarActivity implements
     }
 
     @Override
-    public void onClicked(int view) {
-        viewClickHandler.onClicked(view);
+    public void onScanClickHandler(View v) {
+        if (v.getId() == R.id.qrImageView) {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+            startActivityForResult(intent, 2207);
+        }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        switch (requestCode) {
+            case 2207:
+                if (resultCode == RESULT_OK) {
+                    Bundle b = data.getExtras();
+                    String qrURL = b.getString("qrData");
+
+                    // Get QR type
+                    int mQRTYpe = QRCodeHelper.getQRType(UIUtils.unescape(qrURL));
+
+                    // QR Actions
+                    switch (mQRTYpe) {
+                        case 0:
+                            // Do personal QR alert
+                            Logger.m("doing personal");
+                                doPersonal(UIUtils.unescape(qrURL));
+                            break;
+                        case 1:
+                            // Do business
+                            break;
+                        case 2:
+                            // Do product
+                            break;
+                        case 3:
+                            // Do service
+                            break;
+                        default:
+                            // An error has occurred.
+                            break;
+                    }
+                }
+                break;
+        }
+
+    }
+
+    private void doPersonal(String qrData){
+        String[] secondSplit = QRCodeHelper.getSecondSplitArray(qrData);
+//        Logger.s(HomeActivity.this, qrData);
+//        Logger.m(qrData);
+//        Logger.m(String.valueOf(secondSplit.length)+" "+secondSplit[0]+" "+secondSplit[1]+ " "+secondSplit[2]);
+//        if (secondSplit.length < 1) {
+//            //Split invalid show error
+//            Logger.m(secondSplit[0]);
+//        } else {
+//            switch (secondSplit[2]) {
+//                case "contact":
+//                    // DO contact action
+//                    Logger.m("doing contact");
+//                    break;
+//                case "transfer":
+//                    // Do transfer
+//                    initTransfer(secondSplit);
+//                    break;
+//            }
+//        }
+    }
+
+    private void initTransfer(final String[] secondSplit) {
+        ParseQuery<ParseObject> mAccount = ParseQuery.getQuery("Accounts");
+        mAccount.whereEqualTo(Constants.KEY_ACCOUNT_HOLDERS_RELATION, mCurrentUser);
+        mAccount.whereEqualTo(Constants.KEY_QR_TYPE, Constants.KEY_QR_TYPE_PERSONAL);
+        mAccount.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                int balance;
+                if (e == null) {
+                    balance = parseObject.getInt("currentBalance");
+                    if (doTransfer(secondSplit[2], Integer.parseInt(secondSplit[3]), balance)){
+                        //Transfer done
+                        Logger.s(HomeActivity.this, "Transfer complete");
+                    } else if(Integer.parseInt(secondSplit[3]) > balance){
+                        Logger.s(HomeActivity.this, "Insufficient funds.");
+                    }else {
+                        Logger.s(HomeActivity.this, getString(R.string.general_error_message_txt));
+                    }
+
+                }
+            }
+        });
+    }
+
+    private boolean doTransfer(String userId, final int amount, int balance) {
+        final boolean[] isBalanceSufficient = new boolean[1];
+        if (balance >= amount) {
+            ParseQuery<ParseUser> getUser = ParseUser.getQuery();
+            getUser.whereEqualTo("objectId", userId);
+            getUser.getFirstInBackground(new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    ParseQuery<ParseObject> mAccount = ParseQuery.getQuery("Accounts");
+                    mAccount.whereEqualTo(Constants.KEY_ACCOUNT_HOLDERS_RELATION, parseUser);
+                    mAccount.whereEqualTo(Constants.KEY_QR_TYPE, Constants.KEY_QR_TYPE_PERSONAL);
+                    mAccount.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject parseObject, ParseException e) {
+                            int oldBal = parseObject.getInt("currentBalance");
+                            int newBal = oldBal + amount;
+                            parseObject.put("currentBalance", newBal);
+                            parseObject.saveInBackground();
+                            if (!parseObject.isDirty()){
+                                isBalanceSufficient[0] = true;
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            // Insufficient balance available
+            isBalanceSufficient[0] = false;
+        }
+        return isBalanceSufficient[0];
+    }
 }

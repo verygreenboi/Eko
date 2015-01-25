@@ -1,16 +1,15 @@
 package ng.codehaven.eko.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
@@ -28,13 +27,13 @@ public class HistoryActivity extends ActionBarActivity {
 
     public static final int[] mTabIndicatorColors =
             {
-                    R.color.colorPrimaryDark,
+                    R.color.md_orange_400,
 
-                    R.color.colorPrimary,
+                    R.color.md_blue_400,
 
-                    R.color.colorPrimaryLight,
+                    R.color.md_green_400,
 
-                    R.color.colorPrimaryAccent_1
+                    R.color.md_red_400
             };
 
     @InjectView(R.id.homeToolBar)
@@ -56,17 +55,11 @@ public class HistoryActivity extends ActionBarActivity {
 
         // Setup toolbar
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent parentIntent = getSupportParentActivityIntent();
-                startActivity(parentIntent);
-            }
-        });
 
-        mToolBarTitle = (TextView)mToolbar.findViewById(R.id.toolbar_title);
+        mToolBarTitle = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         mToolBarTitle.setTypeface(FontCache.get(Constants.ABC_FONT, HistoryActivity.this));
         mToolBarTitle.setText(getString(R.string.title_activity_history));
 
@@ -82,7 +75,7 @@ public class HistoryActivity extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int i) {
-                    mSlidingTabs.setSelectedIndicatorColors(getResources().getColor(mTabIndicatorColors[i]));
+                mSlidingTabs.setSelectedIndicatorColors(getResources().getColor(mTabIndicatorColors[i]));
             }
 
             @Override
@@ -108,9 +101,12 @@ public class HistoryActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

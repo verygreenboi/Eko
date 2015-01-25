@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.adapters.BusinessAdapter;
 import ng.codehaven.eko.adapters.InitialHeaderAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.dialogFragments.AddBusinessFragment;
@@ -29,7 +30,7 @@ import ng.codehaven.eko.utils.Logger;
  * A simple {@link Fragment} subclass.
  */
 public class BusinessFragment extends BaseListFragment  {
-    private ArrayList<JSONObject> txList;
+    private BusinessAdapter mAdapter;
     private StickyHeadersItemDecoration top;
 
 
@@ -50,11 +51,6 @@ public class BusinessFragment extends BaseListFragment  {
     @Override
     protected int getLayout() {
         return R.layout.fragment_history;
-    }
-
-    @Override
-    protected int getAdapterType() {
-        return 1;
     }
 
     @Override
@@ -88,6 +84,8 @@ public class BusinessFragment extends BaseListFragment  {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAdapter = new BusinessAdapter(getActivity(), txList);
+        mRecycler.setAdapter(mAdapter);
         mRecycler.setRefreshListener(this);
         mRecycler.setRefreshingColorResources(
                 R.color.md_orange_400,
@@ -95,7 +93,7 @@ public class BusinessFragment extends BaseListFragment  {
                 R.color.md_green_400,
                 R.color.md_red_400);
         top = new StickyHeadersBuilder().
-                setAdapter(businessAdapter).
+                setAdapter(mAdapter).
                 setRecyclerView(mRecycler.getRecyclerView()).
                 setStickyHeadersAdapter(new InitialHeaderAdapter(txList)).build();
 
@@ -121,7 +119,7 @@ public class BusinessFragment extends BaseListFragment  {
     public void onRefresh() {
         super.onRefresh();
         Logger.s(getActivity(), getActivity().getString(R.string.refresh_message));
-        businessAdapter.clear();
+        mAdapter.clear();
 
         try {
             JSONArray items = getTransactionArrays();
@@ -134,7 +132,7 @@ public class BusinessFragment extends BaseListFragment  {
             e.printStackTrace();
         }
 
-        businessAdapter.addAll(txList);
+        mAdapter.addAll(txList);
 
         if (mRecycler.getSwipeToRefresh().isRefreshing()){
             mRecycler.getSwipeToRefresh().setRefreshing(false);

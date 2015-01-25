@@ -41,7 +41,7 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_below="@+id/topMeta"
-        app:layout_empty="@layout/empty_view"
+        app:layout_empty="@layout/empty_business_view"
         app:layout_moreProgress="@layout/view_more_progress"
         app:recyclerClipToPadding="false"
         app:scrollbarStyle="outsideOverlay" />

@@ -11,16 +11,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.adapters.HistoryItemsAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.BaseListFragment;
+import ng.codehaven.eko.ui.views.DividerItemDecoration;
 import ng.codehaven.eko.utils.Logger;
 
 
 public class FundRequestHistory extends BaseListFragment {
+    private HistoryItemsAdapter mAdapter;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAdapter = new HistoryItemsAdapter(getActivity(), txList);
+        mRecycler.setAdapter(mAdapter);
+        mRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), null));
         mRecycler.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -43,11 +49,6 @@ public class FundRequestHistory extends BaseListFragment {
     @Override
     protected int getLayout() {
         return R.layout.fragment_fund_request_history;
-    }
-
-    @Override
-    protected int getAdapterType() {
-        return 0;
     }
 
     @Override

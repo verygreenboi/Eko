@@ -1,0 +1,14 @@
+<resources>
+    <style name="titleTextViewStyle" parent="customTextView">
+        <item name="ng.codehaven.eko.release:font">fonts/Roboto-Thin.ttf</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="primaryBodyTextViewStyleBase" parent="@android:style/Widget.TextView">
+        <item name="ng.codehaven.eko.release:font">fonts/RobotoCondensed-Regular.ttf</item>
+    </style>
+    <style name="secondaryBodyTextViewStyleBase" parent="@android:style/Widget.TextView">
+        <item name="ng.codehaven.eko.release:font">fonts/RobotoCondensed-Light.ttf</item>
+    </style>
+
+</resources>

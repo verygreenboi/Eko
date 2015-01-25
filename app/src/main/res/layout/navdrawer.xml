@@ -9,18 +9,6 @@
     android:fitsSystemWindows="true"
     app:insetForeground="#4000">
 
-    <!--<ImageView-->
-    <!--android:id="@+id/coverImageView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="152dp"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:contentDescription="@string/coverImage"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:src="@drawable/default_cover" />-->
-
     <FrameLayout
         android:id="@+id/topMeta"
         android:layout_width="match_parent"

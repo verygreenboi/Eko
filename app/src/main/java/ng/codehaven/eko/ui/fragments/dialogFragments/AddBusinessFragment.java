@@ -4,18 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.ToggleButton;
 
 import ng.codehaven.eko.R;
 
@@ -23,13 +16,6 @@ import ng.codehaven.eko.R;
  * Created by Thompson on 10/01/2015.
  */
 public class AddBusinessFragment extends DialogFragment {
-
-    EditText
-            mBusinessName,
-            mBusinessAddress,
-            mBusinessNumber;
-    ToggleButton mToggleBtn;
-    Switch mSwitch;
 
     public AddBusinessFragment() {
     }
@@ -46,7 +32,7 @@ public class AddBusinessFragment extends DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, String name, String address, String phone, boolean isTransport);
+        public void onDialogPositiveClick(DialogFragment dialog);
 
         public void onDialogNegativeClick(DialogFragment dialog);
     }
@@ -69,40 +55,6 @@ public class AddBusinessFragment extends DialogFragment {
         }
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//
-//        String title = getArguments().getString("title");
-//
-//        if (!title.isEmpty()) {
-//            getDialog().setTitle(title);
-//        } else {
-//            getDialog().setTitle("New Business");
-//        }
-//
-//        View v = inflater.inflate(R.layout.add_business_fragment, container, false);
-//
-//        mBusinessName = (EditText) v.findViewById(R.id.businessName);
-//        mBusinessAddress = (EditText) v.findViewById(R.id.businessAddress);
-//        mBusinessNumber = (EditText) v.findViewById(R.id.businessPhone);
-//
-//        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.GINGERBREAD
-//                || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-//
-//            mToggleBtn = (ToggleButton) v.findViewById(R.id.businessTypeToggle);
-//
-//        } else {
-//            mSwitch = (Switch) v.findViewById(R.id.businessTypeSwitch);
-//        }
-//
-//        mBusinessName.requestFocus();
-//        getDialog().setCanceledOnTouchOutside(false);
-//        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-//
-//
-//        return v;
-//    }
-
     /**
      * The system calls this only when creating the layout in a dialog.
      */
@@ -122,37 +74,13 @@ public class AddBusinessFragment extends DialogFragment {
 
         String title = getArguments().getString("title");
 
-        mBusinessName = (EditText) v.findViewById(R.id.businessName);
-        mBusinessAddress = (EditText) v.findViewById(R.id.businessAddress);
-        mBusinessNumber = (EditText) v.findViewById(R.id.businessPhone);
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.GINGERBREAD
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-
-            mToggleBtn = (ToggleButton) v.findViewById(R.id.businessTypeToggle);
-
-        } else {
-            mSwitch = (Switch) v.findViewById(R.id.businessTypeSwitch);
-        }
-
         builder.setTitle(title)
                 .setView(v)
                 .setPositiveButton(R.string.add_business_menu_action, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String businessName, businessAddress, businessPhone;
-                        boolean isTransport;
 
-                        businessName = mBusinessName.getText().toString().toLowerCase().trim();
-                        businessAddress = mBusinessAddress.getText().toString().toLowerCase().trim();
-                        businessPhone = mBusinessNumber.getText().toString().toLowerCase().trim();
-                        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.GINGERBREAD
-                                || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                            isTransport = mToggleBtn.isChecked();
-                        } else {
-                            isTransport = mSwitch.isChecked();
-                        }
-                        mListener.onDialogPositiveClick(AddBusinessFragment.this, businessName, businessAddress, businessPhone, isTransport);
+                        mListener.onDialogPositiveClick(AddBusinessFragment.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
