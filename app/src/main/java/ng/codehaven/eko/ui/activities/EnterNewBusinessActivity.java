@@ -178,6 +178,7 @@ public class EnterNewBusinessActivity extends ActionBarActivity implements View.
     }
 
     private void createBusinessAccount(final ParseObject business) {
+        business.pinInBackground("myBusiness");
         ParseRelation<ParseObject> mBusinessRelation;
         ParseObject mAccount = new ParseObject("Accounts");
         mAccount.put("type", Constants.KEY_QR_TYPE_BUSINESS);
@@ -185,7 +186,7 @@ public class EnterNewBusinessActivity extends ActionBarActivity implements View.
         mAccount.put("active", true);
         mBusinessRelation = mAccount.getRelation(Constants.KEY_BUSINESS_ACCOUNT_HOLDERS_RELATION);
         mBusinessRelation.add(business);
-        mAccount.saveInBackground(new SaveCallback() {
+        mAccount.pinInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
@@ -199,6 +200,7 @@ public class EnterNewBusinessActivity extends ActionBarActivity implements View.
                 }
             }
         });
+        mAccount.saveEventually();
     }
 
     @Override

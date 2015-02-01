@@ -5,18 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+import com.parse.ParseObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.helpers.ImageHelper;
 import ng.codehaven.eko.ui.activities.BusinessDetailsActivity;
 import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.utils.ImageCacheManager;
@@ -32,20 +33,19 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     public static final String ADD_BUSINESS_INTENT = "ng.codehaven.eko.ADD_BUSINESS";
 
-    protected ArrayList<JSONObject> businesses;
+    protected List<ParseObject> businesses;
     protected Context ctx;
     protected ImageLoader imageLoader;
     protected String mBusinessTitle;
 
     // Adapter constructor
 
-    public BusinessAdapter(Context c, ArrayList<JSONObject> businesses) {
+    public BusinessAdapter(Context c, List<ParseObject> businesses) {
         this.businesses = businesses;
         this.ctx = c;
         setHasStableIds(true);
         this.imageLoader = ImageCacheManager.getInstance().getImageLoader();
     }
-
 
 
     @Override
@@ -55,17 +55,34 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        try {
-            mBusinessTitle = businesses.get(i).getString("id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            mBusinessTitle = null;
-        }
+    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
+        mBusinessTitle = businesses.get(i).getString("title");
+        final String mBusinessId = businesses.get(i).getObjectId();
+
         viewHolder.getmTitle().setText(mBusinessTitle);
-        viewHolder.getmImage().setDefaultImageResId(R.id.qrImageView);
-        viewHolder.getmImage().setErrorImageResId(R.id.qrImageView);
-        viewHolder.getmImage().setImageUrl(UIUtils.getImageUrl(mBusinessTitle, ctx), imageLoader);
+        Logger.m(businesses.get(i).getParseFile("logo").getUrl());
+
+        viewHolder.getmImage().setImageResource(R.drawable.person_image_empty);
+
+        if (ImageHelper.fileExists(ctx, mBusinessId)) {
+            viewHolder.getmImage().setImageURI(ImageHelper.getImageURI(ctx, mBusinessId));
+        } else {
+            imageLoader.get(UIUtils.getImageUrl(
+                    businesses.get(i).getParseFile("logo").getUrl(), ctx), new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    if (response.getBitmap() != null) {
+                        viewHolder.getmImage().setImageBitmap(response.getBitmap());
+                        ImageHelper.storeImage(ctx, response.getBitmap(), mBusinessId);
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    viewHolder.getmImage().setImageResource(R.drawable.person_image_empty);
+                }
+            });
+        }
 
     }
 
@@ -76,12 +93,12 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     // Helper methods
 
-    public void addBusiness(int position, JSONObject data) {
+    public void addBusiness(int position, ParseObject data) {
         businesses.add(position, data);
         notifyItemInserted(position);
     }
 
-    public void addAll(ArrayList<JSONObject> txList){
+    public void addAll(List<ParseObject> txList) {
         int startIndex = businesses.size();
         businesses.addAll(startIndex, txList);
         notifyItemRangeInserted(startIndex, txList.size());
@@ -92,7 +109,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         notifyItemRemoved(position);
     }
 
-    public void clear(){
+    public void clear() {
         int size = businesses.size();
         businesses.clear();
         notifyItemRangeRemoved(0, size);
@@ -104,18 +121,17 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
         private Context ctx;
 
-        public NetworkImageView mImage;
+        public ImageView mImage;
         public CustomTextView mTitle;
         public ImageView mSecondaryAction;
-        public Button mAddBusiness;
 
         private int position;
         private String id;
 
-        private JSONObject business;
-        private ArrayList<JSONObject> businesses;
+        private ParseObject business;
+        private List<ParseObject> businesses;
 
-        public NetworkImageView getmImage() {
+        public ImageView getmImage() {
             return mImage;
         }
 
@@ -127,16 +143,17 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             return mSecondaryAction;
         }
 
-        public ViewHolder(Context c, View itemView, ArrayList<JSONObject> businesses) {
+        public ViewHolder(Context c, View itemView, List<ParseObject> businesses) {
             super(itemView);
             this.ctx = c;
             this.businesses = businesses;
-            mImage = (NetworkImageView) itemView.findViewById(R.id.mBusinessLogo);
+            mImage = (ImageView) itemView.findViewById(R.id.mBusinessLogo);
             mTitle = (CustomTextView) itemView.findViewById(R.id.businessTitle);
             mSecondaryAction = (ImageView) itemView.findViewById(R.id.secondaryAction);
 
             mSecondaryAction.setOnClickListener(this);
-            mAddBusiness.setOnClickListener(this);
+            itemView.setLongClickable(true);
+            itemView.setOnLongClickListener(this);
             mImage.setOnClickListener(this);
             mTitle.setOnClickListener(this);
         }
@@ -146,20 +163,23 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         public void onClick(View v) {
             position = getPosition();
             business = businesses.get(position);
-            try {
-                id = businesses.get(position).getString("id");
-                Logger.s(ctx, id);
-            } catch (JSONException e) {
-                id = null;
-                e.printStackTrace();
-            }
+            id = businesses.get(position).getObjectId();
             switch (v.getId()) {
                 case R.id.secondaryAction:
                     // TODO: Show business edit functions
                     break;
                 default:
                     Logger.m(String.valueOf(v.getId()));
-                    IntentUtils.startActivityWithJSON(ctx, business, BusinessDetailsActivity.class);
+                    try {
+                        JSONObject obj = new JSONObject();
+                        obj.put("title", business.get("title"));
+                        obj.put("id", business.getObjectId());
+                        obj.put("isTransport", business.get("type") == 1);
+                        obj.put("logoUrl", business.getParseFile("logo").getUrl());
+                        IntentUtils.startActivityWithJSON(ctx, obj, BusinessDetailsActivity.class);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }

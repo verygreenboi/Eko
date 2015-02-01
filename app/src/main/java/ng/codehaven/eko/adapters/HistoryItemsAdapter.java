@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.ocpsoft.pretty.time.PrettyTime;
 
 import org.json.JSONException;
@@ -120,12 +119,9 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
         private Context context;
         private ArrayList<JSONObject> transactions;
 
-        public NetworkImageView mBusinessLogo;
-
         public ViewHolder(Context context, View itemView, ArrayList<JSONObject> transactions) {
             super(itemView);
             businessTitle = (CustomTextView) itemView.findViewById(R.id.businessTitle);
-            mBusinessLogo = (NetworkImageView) itemView.findViewById(R.id.mBusinessLogo);
             objId = (CustomTextView) itemView.findViewById(R.id.objectId);
             tStamp = (CustomTextView) itemView.findViewById(R.id.timestamp);
             resolution = (CustomTextView) itemView.findViewById(R.id.resolution);

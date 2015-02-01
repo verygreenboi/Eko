@@ -2,8 +2,6 @@ package ng.codehaven.eko.utils;
 
 import android.content.Context;
 
-import com.parse.ParseUser;
-
 import ng.codehaven.eko.BuildType;
 import ng.codehaven.eko.Constants;
 
@@ -19,13 +17,13 @@ public class UIUtils {
 
         if (BuildType.type == 0) {
             email = "debug-" + id + "-" + Utils.IMEI(ctx) + "@eko.ng";
+            hash = MD5Util.md5Hex(email);
+
+            url = Constants.KEY_GRAVATAR_URL + hash + "?d=wavatar";
         } else {
-            email = ParseUser.getCurrentUser().getEmail();
+            url = id;
         }
 
-        hash = MD5Util.md5Hex(email);
-
-        url = Constants.KEY_GRAVATAR_URL + hash + "?d=wavatar";
 
         return url;
     }

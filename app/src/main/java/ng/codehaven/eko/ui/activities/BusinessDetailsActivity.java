@@ -2,7 +2,7 @@ package ng.codehaven.eko.ui.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
@@ -16,31 +16,30 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.ImageLoader;
 import com.ocpsoft.pretty.time.PrettyTime;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.helpers.ImageHelper;
 import ng.codehaven.eko.ui.views.CustomTextView;
+import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.UIUtils;
 
 public class BusinessDetailsActivity extends ActionBarActivity {
+
+    private ImageLoader mImageLoader;
 
     private JSONObject jsonObject;
     private String
             mTitle,
             mObject,
-            mCreatedAt;
+            imageUrl;
 
     private int
             mTransactionType,
@@ -49,7 +48,7 @@ public class BusinessDetailsActivity extends ActionBarActivity {
 
     PrettyTime mPtime = new PrettyTime();
 
-    boolean isResolved;
+    boolean isTransport;
 
     private Bitmap mImageBitmap;
     private float mScrimAlpha = 0.9F;
@@ -69,6 +68,7 @@ public class BusinessDetailsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_details);
+        mImageLoader = ImageCacheManager.getInstance().getImageLoader();
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolBar);
@@ -81,49 +81,46 @@ public class BusinessDetailsActivity extends ActionBarActivity {
         try {
             jsonObject = new JSONObject(jsonData);
             mObject = jsonObject.getString("id");
-            mTransactionType = jsonObject.getInt("tType");
-            mAmount = jsonObject.getInt("amount");
-            mCreatedAt = mPtime.format(new Date(jsonObject.getLong("createdAt")));
-            isResolved = jsonObject.getBoolean("isResolved");
+            mTitle = jsonObject.getString("title");
+            imageUrl = jsonObject.getString("logoUrl");
+            isTransport = jsonObject.getBoolean("isTransport");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        String url = UIUtils.getImageUrl(mObject, this);
-        mTitleView.setText(mObject);
+        String url = UIUtils.getImageUrl(imageUrl, this);
+        mTitleView.setText(mTitle);
 
-        RequestQueue rq = Volley.newRequestQueue(this);
-
-        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                mImageBitmap = response;
-                mLogo.setImageBitmap(response);
-                Palette p = getPalette(response);
-                Palette.Swatch vibrant = p.getDarkVibrantSwatch();
-                if (vibrant != null) {
-                    mToolBar.setBackgroundColor(vibrant.getRgb());
-                    mScroller.setBackgroundColor(vibrant.getRgb());
-                    mMetaScrim.setBackgroundColor(vibrant.getRgb());
-                    mToolBar.setTitleTextColor(vibrant.getTitleTextColor());
-
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-//                        mMetaScrim.setAlpha(mScrimAlpha);
-//                    } else {
-//                        setAlphaForView(mMetaScrim, mScrimAlpha);
-//                    }
+        if (ImageHelper.fileExists(this, mObject)) {
+            Uri uri = ImageHelper.getImageURI(this, mObject);
+            mLogo.setImageURI(uri);
+            Bitmap bitmap = ImageHelper.getImage(uri);
+            setPalette(bitmap);
+        } else {
+            mImageLoader.get(url, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    mLogo.setImageBitmap(response.getBitmap());
+                    setPalette(response.getBitmap());
                 }
-            }
 
-        }, 0, 0, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_android);
-            }
-        });
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-        rq.add(imageRequest);
-
+                }
+            });
+        }
+    }
+    private void setPalette(Bitmap bitmap) {
+        Palette p = getPalette(bitmap);
+        Palette.Swatch vibrant = p.getDarkVibrantSwatch();
+        if (vibrant != null) {
+            mToolBar.setBackgroundColor(vibrant.getRgb());
+            mLogo.setBackgroundColor(vibrant.getRgb());
+            mMetaScrim.setBackgroundColor(vibrant.getRgb());
+            mToolBar.setTitleTextColor(vibrant.getTitleTextColor());
+            mTitleView.setTextColor(vibrant.getTitleTextColor());
+        }
     }
 
     private void setAlphaForView(View v, float f) {
@@ -151,12 +148,6 @@ public class BusinessDetailsActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
         switch (id) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);

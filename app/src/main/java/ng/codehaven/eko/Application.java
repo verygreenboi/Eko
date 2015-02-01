@@ -16,13 +16,14 @@ import ng.codehaven.eko.utils.RequestManager;
  * Base Application
  */
 public class Application extends SugarApp {
-    private static int DISK_IMAGECACHE_SIZE = 1024*1024*10;
+    private static int DISK_IMAGECACHE_SIZE = 1024 * 1024 * 10;
     private static Bitmap.CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = Bitmap.CompressFormat.PNG;
     private static int DISK_IMAGECACHE_QUALITY = 100;  //PNG is lossless so quality is ignored but must be provided
 
 
     @Override
     public void onCreate() {
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this, getString(R.string.app_id), getString(R.string.app_key));
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
@@ -43,7 +44,7 @@ public class Application extends SugarApp {
     /**
      * Create the image cache. Uses Memory Cache by default. Change to Disk for a Disk based LRU implementation.
      */
-    private void createImageCache(){
+    private void createImageCache() {
         ImageCacheManager.getInstance().init(this,
                 this.getPackageCodePath()
                 , DISK_IMAGECACHE_SIZE

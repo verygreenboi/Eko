@@ -10,18 +10,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.eowise.recyclerview.stickyheaders.StickyHeadersBuilder;
 import com.eowise.recyclerview.stickyheaders.StickyHeadersItemDecoration;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.adapters.BusinessAdapter;
-import ng.codehaven.eko.adapters.InitialHeaderAdapter;
 import ng.codehaven.eko.models.mTransaction;
 import ng.codehaven.eko.ui.fragments.dialogFragments.AddBusinessFragment;
 import ng.codehaven.eko.utils.Logger;
@@ -32,6 +35,8 @@ import ng.codehaven.eko.utils.Logger;
 public class BusinessFragment extends BaseListFragment  {
     private BusinessAdapter mAdapter;
     private StickyHeadersItemDecoration top;
+    private int page = 0;
+    private int number = 12;
 
 
     public BusinessFragment() {
@@ -84,18 +89,28 @@ public class BusinessFragment extends BaseListFragment  {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdapter = new BusinessAdapter(getActivity(), txList);
-        mRecycler.setAdapter(mAdapter);
+        ParseQuery<ParseObject> getBusiness = ParseQuery.getQuery("Businesses");
+        getBusiness.whereEqualTo("ceo", ParseUser.getCurrentUser());
+        getBusiness.setLimit(number);
+        getBusiness.fromLocalDatastore();
+        getBusiness.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                mAdapter = new BusinessAdapter(getActivity(), parseObjects);
+                mRecycler.setAdapter(mAdapter);
+                Logger.m(String.valueOf(parseObjects.size()));
+            }
+        });
         mRecycler.setRefreshListener(this);
         mRecycler.setRefreshingColorResources(
                 R.color.md_orange_400,
                 R.color.md_blue_400,
                 R.color.md_green_400,
                 R.color.md_red_400);
-        top = new StickyHeadersBuilder().
-                setAdapter(mAdapter).
-                setRecyclerView(mRecycler.getRecyclerView()).
-                setStickyHeadersAdapter(new InitialHeaderAdapter(txList)).build();
+//        top = new StickyHeadersBuilder().
+//                setAdapter(mAdapter).
+//                setRecyclerView(mRecycler.getRecyclerView()).
+//                setStickyHeadersAdapter(new InitialHeaderAdapter(txList)).build();
 
 //        mRecycler.addItemDecoration(top);
     }
@@ -120,23 +135,26 @@ public class BusinessFragment extends BaseListFragment  {
         super.onRefresh();
         Logger.s(getActivity(), getActivity().getString(R.string.refresh_message));
         mAdapter.clear();
-
-        try {
-            JSONArray items = getTransactionArrays();
-            txList = new ArrayList<JSONObject>();
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject transaction = items.getJSONObject(i);
-                txList.add(transaction);
+        ParseQuery<ParseObject> getBusiness = ParseQuery.getQuery("Businesses");
+        getBusiness.whereEqualTo("ceo", ParseUser.getCurrentUser());
+        getBusiness.setLimit(number);
+        getBusiness.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(final List<ParseObject> businesses, ParseException e) {
+                ParseObject.unpinAllInBackground("myBusiness", new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        ParseObject.pinAllInBackground("myBusiness", businesses);
+                        mAdapter.addAll(businesses);
+                    }
+                });
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mAdapter.addAll(txList);
+        });
 
         if (mRecycler.getSwipeToRefresh().isRefreshing()){
             mRecycler.getSwipeToRefresh().setRefreshing(false);
         }
 
     }
+
 }

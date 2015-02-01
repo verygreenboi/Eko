@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.ocpsoft.pretty.time.PrettyTime;
 
 import org.json.JSONObject;
@@ -51,7 +51,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public NetworkImageView mImage;
+        public ImageView mImage;
         public CustomTextView mTitle;
         public TextView mId;
 
@@ -60,7 +60,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         public ViewHolder(View itemView, Context c) {
             super(itemView);
             this.ctx = c;
-            mImage = (NetworkImageView)itemView.findViewById(R.id.mBusinessLogo);
+            mImage = (ImageView)itemView.findViewById(R.id.mBusinessLogo);
             mTitle = (CustomTextView)itemView.findViewById(R.id.businessTitle);
             mId = (TextView)itemView.findViewById(R.id.businessId);
             itemView.setOnClickListener(this);
