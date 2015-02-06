@@ -1,12 +1,18 @@
 package ng.codehaven.eko.ui.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,7 +38,7 @@ import ng.codehaven.eko.utils.Logger;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BusinessFragment extends BaseListFragment  {
+public class BusinessFragment extends BaseListFragment implements BusinessAdapter.OnBusinessItemClick  {
     private BusinessAdapter mAdapter;
     private StickyHeadersItemDecoration top;
     private int page = 0;
@@ -87,6 +93,13 @@ public class BusinessFragment extends BaseListFragment  {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.business_context_menu, menu);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ParseQuery<ParseObject> getBusiness = ParseQuery.getQuery("Businesses");
@@ -97,6 +110,7 @@ public class BusinessFragment extends BaseListFragment  {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 mAdapter = new BusinessAdapter(getActivity(), parseObjects);
+                mAdapter.setOnBusinessItemClickListener(BusinessFragment.this);
                 mRecycler.setAdapter(mAdapter);
                 Logger.m(String.valueOf(parseObjects.size()));
             }
@@ -113,6 +127,11 @@ public class BusinessFragment extends BaseListFragment  {
 //                setStickyHeadersAdapter(new InitialHeaderAdapter(txList)).build();
 
 //        mRecycler.addItemDecoration(top);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -157,4 +176,32 @@ public class BusinessFragment extends BaseListFragment  {
 
     }
 
+    @Override
+    public void onSecondaryItemCLick(View view, int position) {
+
+    }
+
+    @Override
+    public void onBusinessImageLongCLick(View view, final int position) {
+        if (view.getId() == R.id.mBusinessLogo){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Do you really want to delete this Business?").setPositiveButton(R.string.btn_delete_business, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mAdapter.removeBusiness(position);
+                    dialog.dismiss();
+                }
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(500);
+            dialog.show();
+        }
+    }
 }

@@ -179,5 +179,6 @@
     <string name="error_title_message">Please enter the title of your business.</string>
     <string name="error_phone_title">Your business must have a phone number.</string>
     <string name="error_phone_message">Please enter your business\' phone number.</string>
+    <string name="btn_delete_business">Yes</string>
 
 </resources>
