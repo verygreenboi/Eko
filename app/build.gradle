@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'hugo'
+//apply plugin: 'hugo'
 
 android {
     compileSdkVersion 21

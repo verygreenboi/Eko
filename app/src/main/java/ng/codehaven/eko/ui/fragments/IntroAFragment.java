@@ -30,7 +30,7 @@ public class IntroAFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_intro_a, container, false);
 
-        CustomTextView cTitle = (CustomTextView)v.findViewById(R.id.introTitle);
+        CustomTextView cTitle = (CustomTextView)v.findViewById(R.id.introTitleTV);
         CustomTextView cBody = (CustomTextView)v.findViewById(R.id.body);
 
 

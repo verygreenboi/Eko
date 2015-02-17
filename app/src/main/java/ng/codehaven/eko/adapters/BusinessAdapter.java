@@ -1,6 +1,7 @@
 package ng.codehaven.eko.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +12,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.parse.ParseObject;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.helpers.ImageHelper;
-import ng.codehaven.eko.ui.activities.BusinessDetailsActivity;
 import ng.codehaven.eko.ui.views.CustomTextView;
 import ng.codehaven.eko.utils.ImageCacheManager;
-import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.UIUtils;
 
@@ -53,6 +49,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         BusinessViewHolder businessViewHolder = new BusinessViewHolder(ctx, v, businesses);
         businessViewHolder.getmImage().setOnClickListener(this);
         businessViewHolder.getmImage().setOnLongClickListener(this);
+        businessViewHolder.getmSecondaryAction().setOnClickListener(this);
         return businessViewHolder;
     }
 
@@ -136,6 +133,17 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         ParseObject business = businesses.get(position);
+        int[] screenLocation = new int[2];
+        v.getLocationOnScreen(screenLocation);
+        int orientation = ctx.getResources().getConfiguration().orientation;
+
+        Bundle info = new Bundle();
+
+        info.putInt("orientation", orientation);
+        info.putInt("left", screenLocation[0]);
+        info.putInt("top", screenLocation[1]);
+        info.putInt("width", v.getWidth());
+        info.putInt("height", v.getHeight());
         switch (v.getId()) {
             case R.id.secondaryAction:
                 // TODO: Show business edit functions
@@ -144,16 +152,8 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
                 break;
             case R.id.mBusinessLogo:
-                Logger.m(String.valueOf(v.getId()));
-                try {
-                    JSONObject obj = new JSONObject();
-                    obj.put("title", business.get("title"));
-                    obj.put("id", business.getObjectId());
-                    obj.put("isTransport", business.get("type") == 1);
-                    obj.put("logoUrl", business.getParseFile("logo").getUrl());
-                    IntentUtils.startActivityWithJSON(ctx, obj, BusinessDetailsActivity.class);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (onBusinessItemClick != null){
+                    onBusinessItemClick.onBusinessImageClick(v, position, business, info);
                 }
                 break;
         }
@@ -171,7 +171,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (v.getId() == R.id.mBusinessLogo) {
             if (onBusinessItemClick != null) {
-                onBusinessItemClick.onBusinessImageLongCLick(v, position);
+                onBusinessItemClick.onBusinessImageLongClick(v, position);
             }
             return true;
         }
@@ -227,9 +227,10 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnBusinessItemClick {
+        public void onBusinessImageClick(View view, int position, ParseObject business,Bundle info);
         public void onSecondaryItemCLick(View view, int position);
 
-        public void onBusinessImageLongCLick(View view, int position);
+        public void onBusinessImageLongClick(View view, int position);
     }
 
 }

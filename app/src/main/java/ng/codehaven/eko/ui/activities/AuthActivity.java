@@ -12,21 +12,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.InjectViews;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.fragments.IntroAFragment;
 import ng.codehaven.eko.ui.fragments.IntroBFragment;
 import ng.codehaven.eko.ui.fragments.IntroCFragment;
 import ng.codehaven.eko.ui.fragments.LoginFragment;
 import ng.codehaven.eko.utils.IntentUtils;
+import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.UIUtils;
 
 public class AuthActivity extends ActionBarActivity implements LoginFragment.DoScanQR {
@@ -35,78 +34,98 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
     protected ViewPager mViewPager;
     @InjectView(R.id.containerView)
     protected RelativeLayout mContainerView;
-    @InjectView(R.id.bgIntroA)
-    View mIntroA;
-    @InjectView(R.id.bgIntroB)
-    protected LinearLayout mIntroB;
+    @InjectView(R.id.landing_bg_2)
+    protected ImageView mLoadingBg2;
+    @InjectView(R.id.logo)
+    protected ImageView mLogo;
+    @InjectView(R.id.img_bg_slide_3) protected ImageView mBottomImage;
 
-    @InjectViews({R.id.circleA,
-            R.id.circleb,
-            R.id.circlec})
-    protected FrameLayout[] circle;
+    int mCurrentPage = 1;
+    float x;
+    float initX;
 
 
-    private Animation mFadeAnimation;
+    AccelerateDecelerateInterpolator sInterpolator = new AccelerateDecelerateInterpolator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.inject(this);
-
-
-        mIntroB.setVisibility(View.INVISIBLE);
-
-        for (FrameLayout fl : circle) {
-            fl.setVisibility(View.INVISIBLE);
-        }
-        int duration = 0;
-        fadeInAnimation(duration);
+        mLoadingBg2.setAlpha(0f);
+        mBottomImage.setAlpha(0f);
+        initX = mLogo.getX();
 
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            int mCurrentPage;
 
             @Override
             public void onPageScrolled(int i, float v, int i2) {
-//                Logger.s(AuthActivity.this, String.valueOf(i));
+                Logger.m("Position --> " + String.valueOf(i) + " Position offset --> " + String.valueOf(v) + " Position Offset Pixels --> " + String.valueOf(i2));
+                if (i == 0) {
+                    mLoadingBg2.setAlpha(v);
+                }
+                if (i == 1 && i2 > 0) {
+                    mLoadingBg2.setAlpha(1 - v);
+                    mLogo.setTranslationX(1 - v);
+                }
+                if (i== 1){
+                    mBottomImage.setAlpha(v);
+                }
+                if (i == 2 && i2 > 0){
+                    mBottomImage.setAlpha(1-v);
+                }
             }
 
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onPageSelected(int i) {
-//                Logger.s(AuthActivity.this, String.valueOf(i));
-                mCurrentPage = i;
-                if (mCurrentPage == 3) {
-                    mIntroA.setVisibility(View.INVISIBLE);
-                } else {
-                    switch (mCurrentPage) {
-                        case 0:
-                            if (mIntroA.getVisibility() != View.VISIBLE) {
-                                mIntroA.startAnimation(fadeInAnimation(500));
-                                mIntroA.setVisibility(View.VISIBLE);
-                            } else {
-                                mIntroA.setVisibility(View.VISIBLE);
-                            }
-                            fadeOutFragB();
-                            break;
-                        case 1:
-                            if (isVisible(mIntroA)) {
-                                mIntroA.startAnimation(fadeOutAnimation(300));
-                                mIntroA.setVisibility(View.INVISIBLE);
-                            }
-                            if (mIntroB.getVisibility() == View.INVISIBLE) {
-                                animateCirclesIn();
-                            }
-                            break;
-                        case 2:
-                            fadeOutFragB();
-                            break;
+                switch (i) {
+                    case 0:
+                        mCurrentPage = 1;
+                        if (mLogo.getX() > 55){
+                            TranslateAnimation ta = new TranslateAnimation(180, 0 , 0, 0);
+                            ta.setDuration(500);
+                            ta.setInterpolator(sInterpolator);
+                            ta.setFillAfter(true);
+                            mLogo.setAnimation(ta);
+                        }
+                        break;
+                    case 1:
+                        if (mCurrentPage == 1) {
+                            TranslateAnimation ta = new TranslateAnimation(0, 180, 0, 0);
+                            ta.setDuration(500);
+                            ta.setInterpolator(sInterpolator);
+                            ta.setFillAfter(true);
+                            mLogo.setAnimation(ta);
+                        }
+                        mCurrentPage = 2;
+                        x = mLogo.getX();
+                        break;
+                    case 2:
+                        if (mCurrentPage != 4) {
+                            mLogo.setX(x);
+                        } else {
+                            TranslateAnimation ta = new TranslateAnimation(0, 180, 0, 0);
+                            ta.setDuration(500);
+                            ta.setInterpolator(sInterpolator);
+                            ta.setFillAfter(true);
+                            mLogo.setAnimation(ta);
+                        }
+                        break;
+                    case 3:
+                        mLogo.setX(x);
+                        TranslateAnimation ta = new TranslateAnimation(x, initX, 0, 0);
+                        ta.setDuration(500);
+                        ta.setInterpolator(sInterpolator);
+                        ta.setFillAfter(true);
+                        mLogo.setAnimation(ta);
+                        mCurrentPage = 4;
+                        break;
 
-
-                    }
                 }
+
             }
 
             @Override
@@ -115,42 +134,6 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
         });
 
     }
-
-    private void fadeOutFragB() {
-        if (isVisible(mIntroB)) {
-            mIntroB.startAnimation(fadeOutAnimation(300));
-            mIntroB.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void animateCirclesIn() {
-        mIntroB.setVisibility(View.VISIBLE);
-        // TODO: Animate circles in
-
-        circle[0].startAnimation(fadeInAnimation(500));
-        circle[0].setVisibility(View.VISIBLE);
-        circle[1].startAnimation(fadeInAnimation(1000));
-        circle[1].setVisibility(View.VISIBLE);
-        circle[2].startAnimation(fadeInAnimation(1500));
-        circle[2].setVisibility(View.VISIBLE);
-    }
-
-    private Animation fadeInAnimation(int duration) {
-        mFadeAnimation = new AlphaAnimation(0f, 1f);
-        mFadeAnimation.setDuration(duration);
-        return mFadeAnimation;
-    }
-
-    private Animation fadeOutAnimation(int duration) {
-        mFadeAnimation = new AlphaAnimation(1f, 0f);
-        mFadeAnimation.setDuration(duration);
-        return mFadeAnimation;
-    }
-
-    private boolean isVisible(View v) {
-        return v.getVisibility() == View.VISIBLE;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

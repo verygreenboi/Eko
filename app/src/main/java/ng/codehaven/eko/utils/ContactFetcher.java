@@ -114,4 +114,5 @@ public class ContactFetcher {
 
         email.close();
     }
+
 }

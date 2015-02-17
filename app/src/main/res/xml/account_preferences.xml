@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Account Settings" />
+
+    <PreferenceScreen
+        android:key="account_settings"
+        android:title="Eko Settings"
+        android:summary="">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="ng.codehaven.eko"
+            android:targetClass="ng.codehaven.eko.ui.activities.SettingsActivity" />
+    </PreferenceScreen>
+</PreferenceScreen>

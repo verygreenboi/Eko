@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ng.codehaven.eko.ui.activities.BusinessDetailsActivity">
@@ -8,168 +9,14 @@
         android:id="@+id/homeToolBar"
         layout="@layout/toolbar" />
 
-    <ScrollView
-        android:id="@+id/scroller"
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        android:id="@+id/businessDetailRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/homeToolBar">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/businessLogo"
-                android:layout_width="match_parent"
-                android:layout_height="264dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop" />
-
-            <RelativeLayout
-                android:id="@+id/metaWrap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/businessLogo"
-                android:paddingLeft="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_vertical_margin">
-
-                <View
-                    android:id="@+id/metaScim"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <ng.codehaven.eko.ui.views.CustomTextView
-                    android:id="@+id/title"
-                    style="@style/titleSmallTextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="78dp"
-                    android:maxLines="2"
-                    android:textColor="@color/primary_text_default_material_dark"
-                    android:textSize="100sp" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/businessLogo"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:background="@color/background_material_light"
-                android:orientation="vertical">
-
-                <!-- A CardView that contains a TextView -->
-                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/summary_card_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="264dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    card_view:cardCornerRadius="4dp">
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="16dp"
-                            android:text="Overview"
-                            android:textColor="@color/colorPrimaryAccent_1"
-                            android:textSize="28sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="96dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:layout_width="64dp"
-                                    android:layout_height="64dp"
-                                    android:layout_gravity="center"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_launcher"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="Accounts"
-                                    android:layout_gravity="center_horizontal"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="96dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:layout_width="64dp"
-                                    android:layout_height="64dp"
-                                    android:layout_gravity="center"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_launcher"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="Reps"
-                                    android:layout_gravity="center_horizontal"/>
-
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="96dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:layout_width="64dp"
-                                    android:layout_height="64dp"
-                                    android:layout_gravity="center"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_launcher"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="Reports"
-                                    android:layout_gravity="center_horizontal"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/md_grey_300" />
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="16dp"
-                            android:text="See more options"
-                            android:textAllCaps="true"
-                            android:textColor="@color/colorPrimaryAccent_1"
-                            style="?android:attr/borderlessButtonStyle"/>
-
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </ScrollView>
-
+        android:layout_below="@+id/homeToolBar"
+        app:layout_empty="@layout/empty_business_view"
+        app:layout_moreProgress="@layout/view_more_progress"
+        app:recyclerClipToPadding="false"
+        app:scrollbarStyle="outsideOverlay"/>
 
 </RelativeLayout>

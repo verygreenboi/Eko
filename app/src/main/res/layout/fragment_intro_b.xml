@@ -8,21 +8,47 @@
     tools:context="ng.codehaven.eko.ui.fragments.IntroAFragment">
 
 
-    <ng.codehaven.eko.ui.views.CustomTextView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/introTitle"
-        style="@style/titleLargeTextViewStyle"
+        android:background="@drawable/label"
+        android:layout_marginTop="102dp"
+        android:layout_marginBottom="8dp">
+
+        <ng.codehaven.eko.ui.views.CustomTextView
+            style="@style/titleLargeTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_b_title_txt"
+            android:layout_marginTop="7dp"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textColor="@color/primary_text_default_material_dark" />
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/intro_b_title_txt"/>
+        android:background="@drawable/sub_label"
+        android:padding="16dp"
+        android:id="@+id/frameLayout"
+        android:layout_below="@id/introTitle"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
 
     <ng.codehaven.eko.ui.views.CustomTextView
         android:id="@+id/body"
-        android:layout_below="@+id/introTitle"
         style="@style/bodyTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/intro_b_body_txt"/>
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/intro_b_body_txt"
+        android:textColor="@color/primary_text_default_material_dark"/>
 
-
+    </FrameLayout>
 
 </RelativeLayout>

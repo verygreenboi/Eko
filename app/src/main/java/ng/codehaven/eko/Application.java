@@ -64,6 +64,16 @@ public class Application extends SugarApp {
         return c;
     }
 
+    public static Application instance = null;
+
+    public static Application getInstance(){
+        if(instance != null) {
+            return instance;
+        } else {
+            return new Application();
+        }
+    }
+
     public static void UpdateParseInstallation(ParseUser user) {
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put(Constants.KEY_USER_ID, user.getObjectId());

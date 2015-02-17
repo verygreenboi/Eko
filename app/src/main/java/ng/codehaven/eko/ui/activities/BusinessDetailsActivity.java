@@ -1,39 +1,39 @@
 package ng.codehaven.eko.ui.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.ocpsoft.pretty.time.PrettyTime;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ng.codehaven.eko.R;
-import ng.codehaven.eko.helpers.ImageHelper;
-import ng.codehaven.eko.ui.views.CustomTextView;
-import ng.codehaven.eko.utils.ImageCacheManager;
-import ng.codehaven.eko.utils.UIUtils;
+import ng.codehaven.eko.adapters.BusinessDetailsAdapter;
 
-public class BusinessDetailsActivity extends ActionBarActivity {
+public class BusinessDetailsActivity extends ActionBarActivity implements BusinessDetailsAdapter.OnSwatchGenerated, BusinessDetailsAdapter.OnBusinessClickListeners {
 
-    private ImageLoader mImageLoader;
+
+//    private static final TimeInterpolator sDecelerator = new DecelerateInterpolator();
+//    private static final TimeInterpolator sAccelerator = new AccelerateInterpolator();
+//
+//    private static final int ANIM_DURATION = 500;
 
     private JSONObject jsonObject;
     private String
@@ -41,35 +41,24 @@ public class BusinessDetailsActivity extends ActionBarActivity {
             mObject,
             imageUrl;
 
-    private int
-            mTransactionType,
-            layoutId,
-            mAmount;
-
-    PrettyTime mPtime = new PrettyTime();
-
     boolean isTransport;
 
-    private Bitmap mImageBitmap;
-    private float mScrimAlpha = 0.9F;
+    private BusinessDetailsAdapter mAdapter;
 
     @InjectView(R.id.homeToolBar)
     protected Toolbar mToolBar;
-    @InjectView(R.id.businessLogo)
-    protected ImageView mLogo;
-    @InjectView(R.id.scroller)
-    protected ScrollView mScroller;
-    @InjectView(R.id.metaWrap)
-    protected RelativeLayout mMetaScrim;
-    @InjectView(R.id.title)
-    protected CustomTextView mTitleView;
+
+    @InjectView(R.id.businessDetailRecyclerView)
+    protected SuperRecyclerView mRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_details);
-        mImageLoader = ImageCacheManager.getInstance().getImageLoader();
         ButterKnife.inject(this);
+
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        mRecycler.setLayoutManager(layoutManager);
 
         setSupportActionBar(mToolBar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -78,60 +67,32 @@ public class BusinessDetailsActivity extends ActionBarActivity {
 
         Intent extra = getIntent();
         String jsonData = extra.getStringExtra("jsonObject");
+        parseJSON(jsonData);
+
+        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery("Products");
+        pQuery
+                .fromLocalDatastore()
+                .whereEqualTo("parent_id", mObject)
+                .orderByDescending("created_at").findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> products, ParseException e) {
+                mAdapter = new BusinessDetailsAdapter(BusinessDetailsActivity.this, jsonObject, products);
+                mAdapter.setmSwatchHandler(BusinessDetailsActivity.this);
+                mAdapter.setOnBusinessClickListeners(BusinessDetailsActivity.this);
+                mRecycler.setAdapter(mAdapter);
+            }
+        });
+    }
+
+    private void parseJSON(String jsonData) {
         try {
             jsonObject = new JSONObject(jsonData);
             mObject = jsonObject.getString("id");
             mTitle = jsonObject.getString("title");
-            imageUrl = jsonObject.getString("logoUrl");
             isTransport = jsonObject.getBoolean("isTransport");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        String url = UIUtils.getImageUrl(imageUrl, this);
-        mTitleView.setText(mTitle);
-
-        if (ImageHelper.fileExists(this, mObject)) {
-            Uri uri = ImageHelper.getImageURI(this, mObject);
-            mLogo.setImageURI(uri);
-            Bitmap bitmap = ImageHelper.getImage(uri);
-            setPalette(bitmap);
-        } else {
-            mImageLoader.get(url, new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    mLogo.setImageBitmap(response.getBitmap());
-                    setPalette(response.getBitmap());
-                }
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-        }
-    }
-    private void setPalette(Bitmap bitmap) {
-        Palette p = getPalette(bitmap);
-        Palette.Swatch vibrant = p.getDarkVibrantSwatch();
-        if (vibrant != null) {
-            mToolBar.setBackgroundColor(vibrant.getRgb());
-            mLogo.setBackgroundColor(vibrant.getRgb());
-            mMetaScrim.setBackgroundColor(vibrant.getRgb());
-            mToolBar.setTitleTextColor(vibrant.getTitleTextColor());
-            mTitleView.setTextColor(vibrant.getTitleTextColor());
-        }
-    }
-
-    private void setAlphaForView(View v, float f) {
-        AlphaAnimation animation = new AlphaAnimation(f, f);
-        animation.setDuration(0);
-        animation.setFillAfter(true);
-        v.startAnimation(animation);
-    }
-
-    private Palette getPalette(Bitmap response) {
-        return Palette.generate(response);
     }
 
 
@@ -157,5 +118,16 @@ public class BusinessDetailsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void swatch(Palette.Swatch swatch) {
+        mToolBar.setBackgroundColor(swatch.getRgb());
+        mToolBar.setTitleTextColor(swatch.getTitleTextColor());
+    }
+
+    @Override
+    public void onMoreOptionsClickListener(View v, int position) {
+
     }
 }

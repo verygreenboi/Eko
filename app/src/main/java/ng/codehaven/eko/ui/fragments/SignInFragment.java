@@ -43,7 +43,7 @@ public class SignInFragment extends Fragment {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String getPin = pin.getText().toString().trim();
+                final String getPin = pin.getText().toString().trim();
                 ParseUser.logInInBackground(userId, getPin, new LogInCallback() {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {

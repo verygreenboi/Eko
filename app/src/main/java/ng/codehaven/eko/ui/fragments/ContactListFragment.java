@@ -6,29 +6,28 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import java.util.ArrayList;
 
 import ng.codehaven.eko.R;
-import ng.codehaven.eko.adapters.ContactAdapter;
+import ng.codehaven.eko.adapters.RecyclerContactAdapter;
 import ng.codehaven.eko.models.Contact;
 import ng.codehaven.eko.utils.ContactFetcher;
-import ng.codehaven.eko.utils.ImageCacheManager;
 import ng.codehaven.eko.utils.Utils;
 
 /**
  * Created by mrsmith on 12/14/14.
  */
-public class ContactListFragment extends ListFragment {
+public class ContactListFragment extends Fragment {
 
     private Context ctx;
 
@@ -39,7 +38,11 @@ public class ContactListFragment extends ListFragment {
     private static final String STATE_PREVIOUSLY_SELECTED_KEY =
             "ng.codehaven.eko.ui.fragments.SELECTED_ITEM";
 
-    private ContactAdapter mAdapter; // The main query adapter
+    private RecyclerContactAdapter mAdapter; // The main query adapter
+
+    private SuperRecyclerView mRecycler;
+
+    private LinearLayoutManager mLayoutManager;
 
     private String mSearchTerm; // Stores the current search query term
 
@@ -92,7 +95,7 @@ public class ContactListFragment extends ListFragment {
 
         mIsTwoPaneLayout = getResources().getBoolean(R.bool.large_layout);
 
-        ImageLoader mImageLoader = ImageCacheManager.getInstance().getImageLoader();
+        mLayoutManager = new LinearLayoutManager(getActivity());
 
         // Let this fragment contribute menu items
         setHasOptionsMenu(true);
@@ -100,14 +103,18 @@ public class ContactListFragment extends ListFragment {
         ArrayList<Contact> listContacts = new ContactFetcher(ctx).fetchAll();
 
         // Create the main contacts adapter
-        mAdapter = new ContactAdapter(getActivity(), listContacts);
+//        mAdapter = new ContactAdapter(getActivity(), listContacts);
+
+        mAdapter = new RecyclerContactAdapter(getActivity(), listContacts);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the list fragment layout
-        return inflater.inflate(R.layout.contacts_list_fragment, container, false);
+        View v = inflater.inflate(R.layout.contacts_list_fragment, container, false);
+        mRecycler = (SuperRecyclerView) v.findViewById(R.id.contactList);
+        return v;
     }
 
     @Override
@@ -115,15 +122,17 @@ public class ContactListFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         // Set up ListView, assign adapter and set some listeners. The adapter was previously
         // created in onCreate().
-        ListView lvContacts = getListView();
-        lvContacts.setAdapter(mAdapter);
+//        ListView lvContacts = getListView();
+        mRecycler.setLayoutManager(mLayoutManager);
+        mRecycler.setAdapter(mAdapter);
+//        lvContacts.setAdapter(mAdapter);
 
 
         if (mIsTwoPaneLayout) {
             // In a two-pane layout, set choice mode to single as there will be two panes
             // when an item in the ListView is selected it should remain highlighted while
             // the content shows in the second pane.
-            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
 
     }
@@ -156,7 +165,7 @@ public class ContactListFragment extends ListFragment {
         mOnContactSelectedListener.onSelectionCleared();
 
         // Clears currently checked item
-        getListView().clearChoices();
+//        getListView().clearChoices();
     }
 
     @Override
@@ -167,7 +176,7 @@ public class ContactListFragment extends ListFragment {
             outState.putString(SearchManager.QUERY, mSearchTerm);
 
             // Saves the currently selected contact
-            outState.putInt(STATE_PREVIOUSLY_SELECTED_KEY, getListView().getCheckedItemPosition());
+//            outState.putInt(STATE_PREVIOUSLY_SELECTED_KEY, getListView().getCheckedItemPosition());
         }
     }
 
@@ -197,6 +206,7 @@ public class ContactListFragment extends ListFragment {
          * @param contactUri The contact Uri.
          */
         public void onContactSelected(Uri contactUri);
+
         /**
          * Called when the ListView selection is cleared like when
          * a contact search is taking place or is finishing.

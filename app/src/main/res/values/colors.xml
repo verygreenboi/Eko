@@ -7,6 +7,10 @@
     <color name="colorPrimaryAccent_1_light">@color/md_deep_purple_200</color>
     <color name="colorPrimaryAccent_2">@color/md_red_A400</color>
 
+
+    <color name="btn_context_menu_normal">#ffffff</color>
+    <color name="btn_context_menu_pressed">#40000000</color>
+
     <color name="transparent">#00000000</color>
 
     <color name="body_text_1">#de000000</color>

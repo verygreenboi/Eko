@@ -2,8 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_vertical_margin"
     android:paddingTop="48dp"
     tools:context="ng.codehaven.eko.ui.fragments.IntroAFragment">
 
@@ -12,20 +10,63 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"/>-->
 
-    <ng.codehaven.eko.ui.views.CustomTextView
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_bg_slide_1"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"/>
+
+    <FrameLayout
         android:id="@+id/introTitle"
-        style="@style/titleLargeTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/intro_a_title_txt"/>
+        android:background="@drawable/label"
+        android:padding="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="8dp">
 
     <ng.codehaven.eko.ui.views.CustomTextView
-        android:id="@+id/body"
-        android:layout_below="@+id/introTitle"
-        style="@style/bodyTextViewStyle"
+        style="@style/titleLargeTextViewStyle"
+        android:id="@+id/introTitleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/intro_a_body_txt"/>
+        android:layout_marginTop="7dp"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:textColor="@color/primary_text_default_material_dark"
+        android:text="@string/intro_a_title_txt"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sub_label"
+        android:padding="16dp"
+        android:id="@+id/frameLayout"
+        android:layout_below="@id/introTitle"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <ng.codehaven.eko.ui.views.CustomTextView
+            android:id="@+id/body"
+            style="@style/bodyTextViewStyle"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/primary_text_default_material_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_a_body_txt" />
+    </FrameLayout>
+
+
+
 
 
 

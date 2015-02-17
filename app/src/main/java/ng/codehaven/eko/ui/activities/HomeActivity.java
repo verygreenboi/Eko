@@ -79,6 +79,9 @@ public class HomeActivity extends BaseToolbarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
+
+
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -296,7 +299,7 @@ public class HomeActivity extends BaseToolbarActivity implements
                         case 0:
                             // Do personal QR alert
                             Logger.m("doing personal");
-                                doPersonal(UIUtils.unescape(qrURL));
+                            doPersonal(UIUtils.unescape(qrURL));
                             break;
                         case 1:
                             // Do business
@@ -317,7 +320,7 @@ public class HomeActivity extends BaseToolbarActivity implements
 
     }
 
-    private void doPersonal(String qrData){
+    private void doPersonal(String qrData) {
         String[] secondSplit = QRCodeHelper.getSecondSplitArray(qrData);
 //        Logger.s(HomeActivity.this, qrData);
 //        Logger.m(qrData);
@@ -349,12 +352,12 @@ public class HomeActivity extends BaseToolbarActivity implements
                 int balance;
                 if (e == null) {
                     balance = parseObject.getInt("currentBalance");
-                    if (doTransfer(secondSplit[2], Integer.parseInt(secondSplit[3]), balance)){
+                    if (doTransfer(secondSplit[2], Integer.parseInt(secondSplit[3]), balance)) {
                         //Transfer done
                         Logger.s(HomeActivity.this, "Transfer complete");
-                    } else if(Integer.parseInt(secondSplit[3]) > balance){
+                    } else if (Integer.parseInt(secondSplit[3]) > balance) {
                         Logger.s(HomeActivity.this, "Insufficient funds.");
-                    }else {
+                    } else {
                         Logger.s(HomeActivity.this, getString(R.string.general_error_message_txt));
                     }
 
@@ -381,7 +384,7 @@ public class HomeActivity extends BaseToolbarActivity implements
                             int newBal = oldBal + amount;
                             parseObject.put("currentBalance", newBal);
                             parseObject.saveInBackground();
-                            if (!parseObject.isDirty()){
+                            if (!parseObject.isDirty()) {
                                 isBalanceSufficient[0] = true;
                             }
                         }

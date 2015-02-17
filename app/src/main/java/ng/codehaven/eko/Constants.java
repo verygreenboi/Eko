@@ -8,6 +8,7 @@ public class Constants {
 
     public static final String KEY_USER = "_user";
     public static final String KEY_USER_ID = "userId";
+    public static final String KEY_FRIENDS_RELATION = "friend_relation";
     public static String KEY_BUSINESS_ACCOUNT_HOLDERS_RELATION = "businessAccountHolders";
 
     public enum flavorType{

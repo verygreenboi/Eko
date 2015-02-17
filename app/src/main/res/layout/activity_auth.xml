@@ -5,70 +5,39 @@
     android:layout_height="match_parent"
     tools:context="ng.codehaven.eko.ui.activities.AuthActivity">
 
-    <View
-        android:id="@+id/bgIntroA"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/vector_a" />
+    <ImageView
+        android:id="@+id/landing_bg_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/landing_bg_2"/>
 
-    <LinearLayout
-        android:id="@+id/bgIntroB"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="?attr/actionBarSize"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/img_bg_slide_3"
+        android:src="@drawable/img_bg_slide_3"
         android:layout_alignParentBottom="true"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:layout_marginBottom="192dp"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin">
+        android:layout_alignParentRight="true"
+        android:scaleType="fitXY"
+        android:layout_alignParentEnd="true"/>
 
-        <FrameLayout
-            android:id="@+id/circleA"
-            android:layout_width="78dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/circle_2">
-
-            <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_android" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/circleb"
-            android:layout_width="78dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/circle">
-
-            <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_android"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/circlec"
-            android:layout_width="78dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/circle_3">
-
-            <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_android" />
-        </FrameLayout>
-    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/authViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo" />
 
 
 </RelativeLayout>

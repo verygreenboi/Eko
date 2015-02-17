@@ -26,23 +26,31 @@ import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.adapters.BusinessAdapter;
 import ng.codehaven.eko.models.mTransaction;
+import ng.codehaven.eko.ui.activities.BusinessDetailsActivity;
 import ng.codehaven.eko.ui.fragments.dialogFragments.AddBusinessFragment;
+import ng.codehaven.eko.ui.views.BusinessContextMenu;
+import ng.codehaven.eko.ui.views.BusinessContextMenuManager;
+import ng.codehaven.eko.utils.IntentUtils;
 import ng.codehaven.eko.utils.Logger;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BusinessFragment extends BaseListFragment implements BusinessAdapter.OnBusinessItemClick  {
+public class BusinessFragment extends BaseListFragment implements BusinessAdapter.OnBusinessItemClick,
+        BusinessContextMenu.OnBusinessContextMenuItemClickListener, View.OnClickListener {
     private BusinessAdapter mAdapter;
     private StickyHeadersItemDecoration top;
     private int page = 0;
     private int number = 12;
+
+    private boolean isContextShowing = BusinessContextMenuManager.getInstance().getIsContextMenuShowing();
 
 
     public BusinessFragment() {
@@ -116,6 +124,13 @@ public class BusinessFragment extends BaseListFragment implements BusinessAdapte
             }
         });
         mRecycler.setRefreshListener(this);
+        mRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                BusinessContextMenuManager.getInstance().onScrolled(recyclerView, dx, dy);
+            }
+        });
+        mRecycler.setOnClickListener(this);
         mRecycler.setRefreshingColorResources(
                 R.color.md_orange_400,
                 R.color.md_blue_400,
@@ -170,38 +185,88 @@ public class BusinessFragment extends BaseListFragment implements BusinessAdapte
             }
         });
 
-        if (mRecycler.getSwipeToRefresh().isRefreshing()){
+        if (mRecycler.getSwipeToRefresh().isRefreshing()) {
             mRecycler.getSwipeToRefresh().setRefreshing(false);
         }
 
     }
 
-    @Override
-    public void onSecondaryItemCLick(View view, int position) {
 
+    @Override
+    public void onBusinessImageClick(View view, int position, ParseObject mBusiness, Bundle info) {
+        if (isContextShowing)
+            BusinessContextMenuManager.getInstance().hideContextMenu();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("title", mBusiness.get("title"));
+            obj.put("id", mBusiness.getObjectId());
+            obj.put("isTransport", mBusiness.get("type") == 1);
+            obj.put("logoUrl", mBusiness.getParseFile("logo").getUrl());
+            obj.put("orientation", info.get("orientation"));
+            obj.put("left", info.get("left"));
+            obj.put("top", info.get("top"));
+            obj.put("width", info.get("width"));
+            obj.put("height", info.get("height"));
+            IntentUtils.startActivityWithJSON(getActivity(), obj, BusinessDetailsActivity.class);
+//            getActivity().overridePendingTransition(0 , 0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onBusinessImageLongCLick(View view, final int position) {
-        if (view.getId() == R.id.mBusinessLogo){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Do you really want to delete this Business?").setPositiveButton(R.string.btn_delete_business, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    mAdapter.removeBusiness(position);
-                    dialog.dismiss();
-                }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+    public void onSecondaryItemCLick(View view, int position) {
+        BusinessContextMenuManager.getInstance().toggleContextMenuFromView(view, position, this);
+    }
 
-            AlertDialog dialog = builder.create();
-            Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(500);
-            dialog.show();
+    @Override
+    public void onBusinessImageLongClick(View view, final int position) {
+        if (view.getId() == R.id.mBusinessLogo) {
+            deleteBusiness(position);
         }
+    }
+
+    @Override
+    public void onDeleteItem(int mItem) {
+        BusinessContextMenuManager.getInstance().hideContextMenu();
+        deleteBusiness(mItem);
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        if (isContextShowing) {
+            BusinessContextMenuManager.getInstance().hideContextMenu();
+        }
+    }
+
+    private void deleteBusiness(final int position) {
+        if (isContextShowing)
+            BusinessContextMenuManager.getInstance().hideContextMenu();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Do you really want to delete this Business?").setPositiveButton(R.string.btn_delete_business, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAdapter.removeBusiness(position);
+                dialog.dismiss();
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+
+        AlertDialog dialog = builder.create();
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(500);
+        dialog.show();
     }
 }

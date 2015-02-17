@@ -11,6 +11,7 @@ public class Contact {
     public String id;
     public String name;
     public String photo_thumbnail_uri;
+    public boolean inEko;
     public ArrayList<ContactEmail> emails;
     public ArrayList<ContactPhone> numbers;
 
