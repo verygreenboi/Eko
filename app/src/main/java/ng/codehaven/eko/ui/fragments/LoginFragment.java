@@ -16,6 +16,7 @@ import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.ui.activities.LoginActivity;
 import ng.codehaven.eko.ui.activities.RegisterLoginActivity;
 import ng.codehaven.eko.utils.IntentUtils;
 
@@ -29,6 +30,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private View v;
 
     Button scanButton;
+    Button loginButton;
     ImageScanner scanner;
 
     DoScanQR handler;
@@ -52,6 +54,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 //        Logger.s(getActivity(), TAG + " onCreateView");
         v = inflater.inflate(R.layout.fragment_login, container, false);
         scanButton = (Button) v.findViewById(R.id.ScanButton);
+        loginButton = (Button) v.findViewById(R.id.LoginButton);
         return v;
     }
 
@@ -60,6 +63,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         super.onResume();
         scanButton.setOnClickListener(this);
+
+        loginButton.setOnClickListener(this);
     }
 
     @Override
@@ -100,6 +105,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if (v.getId() == R.id.ScanButton){
             handler.doScan(v);
+        }else if (v.getId() == R.id.LoginButton){
+            IntentUtils.startActivity(getActivity(), LoginActivity.class);
         }
     }
 

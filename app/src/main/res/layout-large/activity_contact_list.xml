@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ng.codehaven.eko.ui.activities.ContactsActivity">
+
+    <!--Toolbar-->
+
+    <include
+        android:id="@+id/homeToolBar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/homeToolBar"
+        android:baselineAligned="false">
+
+        <fragment
+            class="ng.codehaven.eko.ui.fragments.ContactListFragment"
+            android:id="@+id/contact_list"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            tools:layout="@layout/contacts_list_fragment" />
+
+        <fragment
+            class="ng.codehaven.eko.ui.fragments.ContactDetailFragment"
+            android:id="@+id/contact_detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+    </LinearLayout>
+
+
+</RelativeLayout>
