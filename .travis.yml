@@ -1,4 +1,7 @@
 language: android
 
-before_install:
- - chmod +x gradlew
+android:
+  components:
+    - build-tools-21.1.2
+    - android-21
+    - extra
