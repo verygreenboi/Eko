@@ -185,5 +185,7 @@
     <string name="Settings">Settings</string>
     <string name="sync_only_one_account">Only one Eko account is supported.</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_authenticator">AuthenticatorActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 
 </resources>

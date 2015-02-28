@@ -9,7 +9,7 @@
         android:summary="">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="ng.codehaven.eko"
-            android:targetClass="ng.codehaven.eko.ui.activities.SettingsActivity" />
+            android:targetPackage="ng.codehaven.eko.release"
+            android:targetClass="ng.codehaven.eko.release.ui.activities.SettingsActivity" />
     </PreferenceScreen>
 </PreferenceScreen>

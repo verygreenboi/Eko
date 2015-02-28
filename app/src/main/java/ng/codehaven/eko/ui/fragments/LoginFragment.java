@@ -2,7 +2,6 @@ package ng.codehaven.eko.ui.fragments;
 
 
 import android.app.Activity;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,14 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
-import net.sourceforge.zbar.Symbol;
-import net.sourceforge.zbar.SymbolSet;
 
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.ui.activities.LoginActivity;
-import ng.codehaven.eko.ui.activities.RegisterLoginActivity;
 import ng.codehaven.eko.utils.IntentUtils;
 
 /**
@@ -71,30 +66,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onPause() {
         super.onPause();
     }
-
-    Camera.PreviewCallback previewCb = new Camera.PreviewCallback() {
-        public void onPreviewFrame(byte[] data, Camera camera) {
-            Camera.Parameters parameters = camera.getParameters();
-            Camera.Size size = parameters.getPreviewSize();
-
-            Image barcode = new Image(size.width, size.height, "Y800");
-            barcode.setData(data);
-
-            int result = scanner.scanImage(barcode);
-
-            if (result != 0) {
-
-                SymbolSet syms = scanner.getResults();
-                for (Symbol sym : syms) {
-                    IntentUtils.startActivityWithStringExtra(getActivity(),
-                            RegisterLoginActivity.class,
-                            EXTRA_MESSAGE,
-                            sym.getData());
-                    getActivity().finish();
-                }
-            }
-        }
-    };
 
     /**
      * Called when a view has been clicked.

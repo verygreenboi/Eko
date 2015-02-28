@@ -1,92 +1,97 @@
 <resources>
 
-    <style name="EditTexteko_theme" parent="android:Widget.EditText">
-        <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
-        <item name="android:textColor">#ffffff</item>
+    <style name="EditTextEko_Theme" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/eko_theme_edit_text_holo_light</item>
+        <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="EditTexteko_theme_Light" parent="android:Widget.EditText">
-        <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
-        <item name="android:textColor">@color/primary_text_default_material_light</item>
+    <style name="AutoCompleteTextViewEko_Theme" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_light</item>
+        <item name="android:background">@drawable/eko_theme_edit_text_holo_light</item>
+        <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="AutoCompleteTextVieweko_theme" parent="android:Widget.AutoCompleteTextView">
-        <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_dark</item>
-        <item name="android:background">@drawable/eko_theme_edit_text_holo_dark</item>
-        <item name="android:textColor">#ffffff</item>
+    <style name="CheckBoxEko_Theme" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/eko_theme_btn_check_holo_light</item>
     </style>
 
-    <style name="CheckBoxeko_theme" parent="android:Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/eko_theme_btn_check_holo_dark</item>
+    <style name="RadioButtonEko_Theme" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/eko_theme_btn_radio_holo_light</item>
     </style>
 
-    <style name="RadioButtoneko_theme" parent="android:Widget.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/eko_theme_btn_radio_holo_dark</item>
-    </style>
-
-    <style name="Buttoneko_theme" parent="android:Widget.Button">
-        <item name="android:background">@drawable/eko_theme_btn_default_holo_dark</item>
+    <style name="ButtonEko_Theme" parent="android:Widget.Button">
+        <item name="android:background">@drawable/eko_theme_btn_default_holo_light</item>
         <item name="android:minHeight">48dip</item>
         <item name="android:minWidth">64dip</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="ImageButtoneko_theme" parent="android:Widget.ImageButton">
-        <item name="android:background">@drawable/eko_theme_btn_default_holo_dark</item>
+    <style name="ImageButtonEko_Theme" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/eko_theme_btn_default_holo_light</item>
     </style>
 
-    <style name="Spinnereko_theme" parent="android:Widget.Spinner">
-        <item name="android:background">@drawable/eko_theme_spinner_background_holo_dark</item>
-        <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+    <style name="SpinnerEko_Theme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/eko_theme_spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/eko_theme_list_selector_holo_light</item>
     </style>
 
-    <style name="SpinnerDropDownItemeko_theme" parent="android:Widget.DropDownItem.Spinner">
-        <item name="android:checkMark">@drawable/eko_theme_btn_radio_holo_dark</item>
+    <style name="SpinnerDropDownItemEko_Theme" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/eko_theme_btn_radio_holo_light</item>
+    </style>
+    <style name="TabEko_Theme">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+        <item name="android:background">@drawable/eko_theme_tab_indicator_holo</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minWidth">80dip</item>
     </style>
 
-    <style name="ProgressBareko_theme" parent="android:Widget.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">
-            @drawable/eko_theme_progress_horizontal_holo_dark
-        </item>
-        <item name="android:indeterminateDrawable">
-            @drawable/eko_theme_progress_indeterminate_horizontal_holo_dark
-        </item>
+    <style name="TabTextEko_Theme">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <!-- v14 <item name="android:textAllCaps">true</item> -->
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:maxWidth">180dip</item>
+    </style>
+
+    <style name="ProgressBarEko_Theme" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/eko_theme_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/eko_theme_progress_indeterminate_horizontal_holo_light</item>
         <item name="android:minHeight">16dip</item>
         <item name="android:maxHeight">16dip</item>
     </style>
 
-    <style name="SeekBareko_theme" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">
-            @drawable/eko_theme_scrubber_progress_horizontal_holo_dark
-        </item>
-        <item name="android:indeterminateDrawable">
-            @drawable/eko_theme_scrubber_progress_horizontal_holo_dark
-        </item>
+    <style name="SeekBarEko_Theme" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/eko_theme_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/eko_theme_scrubber_progress_horizontal_holo_light</item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
-        <item name="android:thumb">@drawable/eko_theme_scrubber_control_selector_holo_dark
-        </item>
+        <item name="android:thumb">@drawable/eko_theme_scrubber_control_selector_holo_light</item>
         <item name="android:thumbOffset">16dip</item>
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
     </style>
 
-    <style name="Toggleeko_theme" parent="android:Widget.Button.Toggle">
-        <item name="android:background">@drawable/eko_theme_btn_toggle_holo_dark</item>
+    <style name="ToggleEko_Theme" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/eko_theme_btn_toggle_holo_light</item>
         <item name="android:minHeight">48dip</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="ListVieweko_theme" parent="android:Widget.ListView">
-        <item name="android:listSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+    <style name="ListViewEko_Theme" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/eko_theme_list_selector_holo_light</item>
     </style>
 
-    <style name="ListVieweko_theme.White" parent="android:Widget.ListView.White">
-        <item name="android:listSelector">@drawable/eko_theme_list_selector_holo_dark</item>
+    <style name="ListViewEko_Theme.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/eko_theme_list_selector_holo_light</item>
     </style>
 
-    <style name="SpinnerItemeko_theme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">#ffffff</item>
+    <style name="SpinnerItemEko_Theme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
     </style>
 
     <style name="homeToolbarStyle" parent="Theme.AppCompat">
@@ -181,6 +186,10 @@
         <item name="android:paddingRight">20dp</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="floatlabelededittext">
+        <item name="android:textColor">#513c7b</item>
     </style>
 
 </resources>

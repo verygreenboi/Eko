@@ -9,35 +9,35 @@
 
         <item name="android:background">@color/background_material_light</item>
 
-        <item name="android:editTextStyle">@style/EditTexteko_theme</item>
+        <item name="android:editTextStyle">@style/EditTextEko_Theme</item>
 
-        <item name="android:textColorHighlight">#99009688</item>
+        <item name="android:textColorHighlight">#99513c7b</item>
 
-        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextVieweko_theme</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewEko_Theme</item>
 
-        <item name="android:checkboxStyle">@style/CheckBoxeko_theme</item>
+        <item name="android:checkboxStyle">@style/CheckBoxEko_Theme</item>
 
-        <item name="android:radioButtonStyle">@style/RadioButtoneko_theme</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonEko_Theme</item>
 
-        <item name="android:buttonStyle">@style/Buttoneko_theme</item>
+        <item name="android:buttonStyle">@style/ButtonEko_Theme</item>
 
-        <item name="android:imageButtonStyle">@style/ImageButtoneko_theme</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonEko_Theme</item>
 
-        <item name="android:spinnerStyle">@style/Spinnereko_theme</item>
+        <item name="android:spinnerStyle">@style/SpinnerEko_Theme</item>
 
-        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemeko_theme</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemEko_Theme</item>
 
-        <item name="android:progressBarStyleHorizontal">@style/ProgressBareko_theme</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarEko_Theme</item>
 
-        <item name="android:seekBarStyle">@style/SeekBareko_theme</item>
+        <item name="android:seekBarStyle">@style/SeekBarEko_Theme</item>
 
-        <item name="android:buttonStyleToggle">@style/Toggleeko_theme</item>
+        <item name="android:buttonStyleToggle">@style/ToggleEko_Theme</item>
 
-        <item name="android:listViewStyle">@style/ListVieweko_theme</item>
+        <item name="android:listViewStyle">@style/ListViewEko_Theme</item>
 
-        <item name="android:listViewWhiteStyle">@style/ListVieweko_theme.White</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewEko_Theme.White</item>
 
-        <item name="android:spinnerItemStyle">@style/SpinnerItemeko_theme</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemEko_Theme</item>
 
         <item name="photoItemForeground">?android:selectableItemBackground</item>
         <item name="photoItemForegroundBorderless">?android:selectableItemBackground</item>
@@ -66,7 +66,7 @@
     </style>
 
     <style name="settingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:editTextStyle">@style/EditTexteko_theme_Light</item>
+        <item name="android:editTextStyle">@style/EditTextEko_Theme</item>
         <item name="android:textColorHint">@color/secondary_text_default_material_light</item>
     </style>
 
@@ -75,9 +75,9 @@
     </style>
 
     <style name="regActivity" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:editTextStyle">@style/EditTexteko_theme</item>
+        <item name="android:editTextStyle">@style/EditTextEko_Theme</item>
         <item name="android:buttonStyle">@style/Buttoneko_theme</item>
-        <item name="android:checkboxStyle">@style/CheckBoxeko_theme</item>
+        <item name="android:checkboxStyle">@style/CheckBoxEko_Theme</item>
         <item name="android:textColorHighlight">#99009688</item>
     </style>
 

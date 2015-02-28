@@ -28,6 +28,7 @@ import butterknife.InjectView;
 import ng.codehaven.eko.BuildType;
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.helpers.AccountHelper;
 import ng.codehaven.eko.helpers.QRCodeHelper;
 import ng.codehaven.eko.ui.BaseToolbarActivity;
 import ng.codehaven.eko.ui.fragments.TapToScanFragment;
@@ -74,6 +75,8 @@ public class HomeActivity extends BaseToolbarActivity implements
     private ParseUser mCurrentUser = ParseUser.getCurrentUser();
 
     onListItemClickListener handler;
+
+    private AccountHelper mAccountHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

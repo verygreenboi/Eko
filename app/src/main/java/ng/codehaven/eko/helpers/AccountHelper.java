@@ -1,18 +1,23 @@
 package ng.codehaven.eko.helpers;
 
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
-import ng.codehaven.eko.Constants;
+import android.accounts.AccountManager;
+import android.content.Context;
 
 /**
- * Created by Thompson on 25/01/2015.
+ * Created by Thompson on 27/02/2015.
  */
 public class AccountHelper {
-    public static void activateAccount(ParseUser user){
-        ParseQuery<ParseObject> mAccount = ParseQuery.getQuery("Accounts");
-        mAccount.whereEqualTo(Constants.KEY_ACCOUNT_HOLDERS_RELATION, user);
-        mAccount.whereEqualTo(Constants.KEY_QR_TYPE, Constants.KEY_QR_TYPE_PERSONAL);
+
+    private Context mContext;
+    private AccountManager mAccountManager;
+
+    public AccountHelper(Context context) {
+        this.mContext = context;
+        mAccountManager = AccountManager.get(context);
     }
+
+    public void getTokenForAccountCreateIfNeeded(String accountType, String authTokenType) {
+
+    }
+
 }

@@ -245,6 +245,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ng.codehaven.eko.ui.activities.BusinessActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".ui.activities.AuthActivity"
+            android:theme="@style/regActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ng.codehaven.eko.ui.activities.AuthActivity" />
+        </activity>
 
         <service
             android:name=".services.ContactsSyncAdapterService"
@@ -261,10 +270,7 @@
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts" />
         </service>
-        <service
-            android:name=".services.AccountAuthenticatorService"
-            android:exported="true"
-            android:process=":auth" >
+        <service android:name=".services.AccountAuthenticatorService" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -275,12 +281,12 @@
         </service>
 
         <activity
-            android:name=".ui.activities.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:parentActivityName=".ui.activities.AuthActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ng.codehaven.eko.ui.activities.AuthActivity" />
+            android:name=".ui.activities.authentication.AuthenticatorActivity"
+            android:label="@string/title_activity_authenticator" >
+        </activity>
+        <activity
+            android:name=".ui.activities.authentication.SignUpActivity"
+            android:label="@string/title_activity_sign_up" >
         </activity>
     </application>
 

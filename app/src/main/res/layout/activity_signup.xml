@@ -1,0 +1,196 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:float="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ng.codehaven.eko.ui.fragments.RegisterFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_vertical_margin">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:layout_marginBottom="8dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/logo" />
+
+                <LinearLayout
+                    android:id="@+id/nameWrapLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    android:orientation="vertical">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:id="@+id/firstNameWrapLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        float:fletPadding="10dp"
+                        float:fletTextAppearance="@style/TextAppearance.AppCompat">
+
+                        <EditText
+                            android:id="@+id/firstNameEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/first_name_hint_txt"
+                            android:inputType="textPersonName"
+                            android:maxLines="1"
+                            android:textColor="@color/primary_text_default_material_light"
+                            android:textColorHint="@color/secondary_text_default_material_light">
+
+                            <requestFocus />
+                        </EditText>
+
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:id="@+id/lastNameWrapLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        float:fletPadding="10dp"
+                        float:fletTextAppearance="@style/TextAppearance.AppCompat">
+
+                        <EditText
+                            android:id="@+id/lastNameEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/last_name_hint_txt"
+                            android:inputType="textPersonName"
+                            android:maxLines="1"
+                            android:textColor="@color/primary_text_default_material_light"
+                            android:textColorHint="@color/secondary_text_default_material_light" />
+
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </LinearLayout>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:id="@+id/emailFloatWrap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    float:fletPadding="10dp"
+                    float:fletTextAppearance="@style/TextAppearance.AppCompat">
+
+                    <EditText
+                        android:id="@+id/emailEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/email_hint_txt"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/primary_text_default_material_light"
+                        android:textColorHint="@color/secondary_text_default_material_light" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:id="@+id/passwordWrap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    float:fletPadding="10dp"
+                    float:fletTextAppearance="@style/TextAppearance.AppCompat">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:textColor="@color/primary_text_default_material_light"
+                        android:textColorHint="@color/secondary_text_default_material_light" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:id="@+id/passwordConfirmationWrap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    float:fletPadding="10dp"
+                    float:fletTextAppearance="@style/TextAppearance.AppCompat">
+
+                    <EditText
+                        android:id="@+id/confirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/confirm_password_hint_txt"
+                        android:inputType="textPassword"
+                        android:textColor="@color/primary_text_default_material_light"
+                        android:textColorHint="@color/secondary_text_default_material_light" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:id="@+id/phoneWrap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    float:fletPadding="10dp"
+                    float:fletTextAppearance="@style/TextAppearance.AppCompat">
+
+                    <EditText
+                        android:id="@+id/phoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phone_hint_txt"
+                        android:inputType="phone"
+                        android:textColor="@color/primary_text_default_material_light"
+                        android:textColorHint="@color/secondary_text_default_material_light" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/registerBtn"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/register_btn_txt"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/haveAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="Already have an account?"
+                android:layout_gravity="center_horizontal"
+                />
+
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"
+                android:text="Sign In"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

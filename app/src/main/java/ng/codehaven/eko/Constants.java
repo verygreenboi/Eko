@@ -1,5 +1,8 @@
 package ng.codehaven.eko;
 
+import ng.codehaven.eko.helpers.ParseComServerAuthenticate;
+import ng.codehaven.eko.interfaces.ServerAuthenticate;
+
 /**
  * Created by mrsmith on 11/9/14.
  * ng.codehaven.eko.ng.codehaven.eko.release.Constants class
@@ -9,6 +12,18 @@ public class Constants {
     public static final String KEY_USER = "_user";
     public static final String KEY_USER_ID = "userId";
     public static final String KEY_FRIENDS_RELATION = "friend_relation";
+    public static final String KEY_ACCOUNT_TYPE = "ng.codehaven.eko.account";
+
+    /**
+     * Auth token types
+     */
+    public static final String AUTHTOKEN_TYPE_READ_ONLY = "Read only";
+    public static final String AUTHTOKEN_TYPE_READ_ONLY_LABEL = "Read only access to an Eko account";
+
+    public static final String AUTHTOKEN_TYPE_FULL_ACCESS = "Full access";
+    public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Full access to an Eko account";
+    public static final String ACCOUNT_TYPE = "ng.codehaven.eko.account";
+
     public static String KEY_BUSINESS_ACCOUNT_HOLDERS_RELATION = "businessAccountHolders";
 
     public enum flavorType{
@@ -95,5 +110,7 @@ public class Constants {
     public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_P2P = 2;
     public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_PRODUCT_PURCHASE = 3;
     public static final int CLASS_TRANSACTIONS_TYPE_FUNDS_REQUEST_SERVICE_PURCHASE = 4;
+
+    public static final ServerAuthenticate sServerAuthenticate = new ParseComServerAuthenticate();
 
 }
