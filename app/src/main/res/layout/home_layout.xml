@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!--Toolbar-->
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <!--Main content-->
 
@@ -14,17 +13,19 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/homeToolBar" />
+        android:layout_below="@+id/homeToolBar"
+        android:layout_centerInParent="true" />
+
+
 
     <!--&lt;!&ndash;Bottom Button&ndash;&gt;-->
 
     <!--<fragment-->
-        <!--android:id="@+id/bottomButtonFragment"-->
-        <!--android:name="ng.codehaven.eko.ui.fragments.BottomContactButtonFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--tools:layout="@layout/fragment_bottom_contact_button" />-->
+    <!--android:id="@+id/bottomButtonFragment"-->
+    <!--android:name="ng.codehaven.eko.ui.fragments.BottomContactButtonFragment"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--tools:layout="@layout/fragment_bottom_contact_button" />-->
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +21,9 @@ import butterknife.InjectView;
 import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
 import ng.codehaven.eko.utils.Logger;
+import ng.codehaven.eko.utils.MD5Util;
 
-public class AuthenticatorActivity extends AccountAuthenticatorActivity implements View.OnClickListener {
+public class AuthenticatorActivity extends AccountAuthenticatorActivity implements View.OnClickListener, View.OnKeyListener {
 
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
     public final static String ARG_AUTH_TYPE = "AUTH_TYPE";
@@ -31,7 +33,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
     public static final String KEY_ERROR_MESSAGE = "ERR_MSG";
 
     public final static String PARAM_USER_PASS = "USER_PASS";
-
 
 
     private ProgressDialog mLoading;
@@ -44,7 +45,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
     protected EditText mPassword;
     @InjectView(R.id.LoginButton)
     protected Button mLoginBtn;
-    @InjectView(R.id.createAccount) protected TextView mSignUpText;
+    @InjectView(R.id.createAccount)
+    protected TextView mSignUpText;
+    @InjectView(R.id.haveAccount) protected TextView mHaveAccount;
 
     private AccountManager mAccountManager;
     private String mAuthTokenType;
@@ -67,6 +70,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
         mLoginBtn.setOnClickListener(this);
         mSignUpText.setOnClickListener(this);
+        mPassword.setOnKeyListener(this);
+        mHaveAccount.setOnClickListener(this);
 
     }
 
@@ -75,7 +80,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         int id = v.getId();
         if (id == R.id.LoginButton) {
             submit();
-        } else if(id == R.id.createAccount){
+        } else if (id == R.id.createAccount || id == R.id.haveAccount) {
             Intent signup = new Intent(getBaseContext(), SignUpActivity.class);
             signup.putExtras(getIntent().getExtras());
             startActivityForResult(signup, REQ_SIGNUP);
@@ -97,8 +102,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         final String userPass = mPassword.getText().toString().trim();
         final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
 
-        Logger.m(userName);
-
         ParseUser.logInInBackground(userName, userPass, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -106,73 +109,48 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
                 String authtoken = null;
                 Bundle data = new Bundle();
 
-                if (e == null){
+                if (e == null) {
                     authtoken = user.getSessionToken();
                     data.putString(AccountManager.KEY_ACCOUNT_NAME, userName);
                     data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
                     data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
-                    data.putString(PARAM_USER_PASS, userPass);
+                    data.putString(PARAM_USER_PASS, MD5Util.md5Hex(userPass));
 
                 } else {
-                    data.putString(KEY_ERROR_MESSAGE, e.getMessage());
+                    switch (e.getCode()) {
+                        case ParseException.CONNECTION_FAILED:
+                        case ParseException.TIMEOUT:
+                            data.putString(KEY_ERROR_MESSAGE, getResources().getString(R.string.network_timeout_message_txt));
+                            break;
+                        case ParseException.OBJECT_NOT_FOUND:
+                            data.putString(KEY_ERROR_MESSAGE, getString(R.string.login_error_txt));
+                            break;
+                        default:
+                            data.putString(KEY_ERROR_MESSAGE, getResources().getString(R.string.general_error_message_txt));
+                            break;
+                    }
+
                 }
 
                 final Intent res = new Intent();
                 res.putExtras(data);
-                finishLogin(res);
+                if (res.hasExtra(KEY_ERROR_MESSAGE)) {
+                    Logger.s(getBaseContext(), res.getStringExtra(KEY_ERROR_MESSAGE));
+                } else {
+                    finishLogin(res);
+                }
 
             }
         });
-
-//        new AsyncTask<String, Void, Intent>() {
-//
-//            @Override
-//            protected void onPreExecute() {
-//                mLoading = ProgressDialog.show(AuthenticatorActivity.this,"Please wait", "Signing In...");
-//                super.onPreExecute();
-//            }
-//
-//            @Override
-//            protected Intent doInBackground(String... params) {
-//                String authtoken = null;
-//                Bundle data = new Bundle();
-//
-//                try {
-//                    authtoken = sServerAuthenticate.userSignIn(userName, userPass, mAuthTokenType);
-//
-//                    data.putString(AccountManager.KEY_ACCOUNT_NAME, userName);
-//                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-//                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
-//                    data.putString(PARAM_USER_PASS, userPass);
-//
-//                } catch (Exception e) {
-//                    data.putString(KEY_ERROR_MESSAGE, e.getMessage());
-//                }
-//
-//                final Intent res = new Intent();
-//                res.putExtras(data);
-//                return res;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Intent intent){
-//                mLoading.dismiss();
-//                if (intent.hasExtra(KEY_ERROR_MESSAGE)) {
-//                    Logger.s(getBaseContext(), intent.getStringExtra(KEY_ERROR_MESSAGE));
-//                } else {
-//                    finishLogin(intent);
-//                }
-//            }
-//        }.execute();
     }
 
     private void finishLogin(Intent intent) {
-
-        Logger.m("finishLogin");
+        final Account account;
 
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
-        final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+
+        account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
             Logger.m("finishLogin > addAccountExplicitly");
@@ -193,5 +171,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_ENTER:
+                mLoginBtn.setPressed(true);
+                mLoginBtn.performClick();
+                return true;
+        }
+        return false;
     }
 }

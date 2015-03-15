@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -27,7 +26,6 @@ public class TapToScanFragment extends Fragment implements View.OnClickListener 
     Context ctx;
     Bundle user;
     ImageView qrImageView;
-    Button mScanButton;
     //    CustomTextView tapToScanTextView;
     FrameLayout tapCameraPreview;
 
@@ -64,8 +62,6 @@ public class TapToScanFragment extends Fragment implements View.OnClickListener 
         String data = user.getString("userQR");
         Logger.m(data);
         tapCameraPreview = (FrameLayout) v.findViewById(R.id.tapCameraPreview);
-        mScanButton = (Button)v.findViewById(R.id.ScanButton);
-        mScanButton.setVisibility(View.GONE);
 
 //        mScanButton.setTypeface(FontCache.get("fonts/Roboto-Medium.ttf", getActivity()));
 //        mScanButton.setTextColor(getResources().getColor(R.color.primary_text_default_material_dark));
@@ -74,10 +70,10 @@ public class TapToScanFragment extends Fragment implements View.OnClickListener 
             Bitmap qrBitmap = QRCodeHelper.generateQRCode(
                     data,
                     getActivity(),
-                    R.color.colorPrimaryDark,
+                    R.color.colorPrimary,
                     R.color.background_material_light,
-                    240,
-                    240
+                    340,
+                    340
             );
             qrImageView = (ImageView) v.findViewById(R.id.qrImageView);
             qrImageView.setImageBitmap(qrBitmap);
@@ -94,13 +90,6 @@ public class TapToScanFragment extends Fragment implements View.OnClickListener 
 //        });
 
         qrImageView.setOnClickListener(this);
-
-        mScanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearOutViewsAnimations();
-            }
-        });
 
         return v;
     }

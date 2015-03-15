@@ -1,7 +1,13 @@
 package ng.codehaven.eko.ui.activities;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -78,12 +84,24 @@ public class HomeActivity extends BaseToolbarActivity implements
 
     private AccountHelper mAccountHelper;
 
+    private AccountManager mAccountManager;
+    ContentResolver mResolver;
+
+    // Sync interval constants
+    public static final long SECONDS_PER_MINUTE = 60L;
+    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
+    public static final long SYNC_INTERVAL =
+            SYNC_INTERVAL_IN_MINUTES *
+                    SECONDS_PER_MINUTE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
 
-
+        mAccountManager = AccountManager.get(this);
+        // Get the content resolver for your app
+        mResolver = getContentResolver();
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -95,9 +113,28 @@ public class HomeActivity extends BaseToolbarActivity implements
             username = "debug";
             init(email, hash, fullname, username);
         } else {
-            if (mCurrentUser == null) {
+            if (!AccountHelper.hasAccount(this) || mCurrentUser == null) {
                 navigateToLogin();
             } else {
+
+//                Logger.m(AccountHelper.getAccount(this).name);
+
+                if (ContentResolver.getSyncAutomatically(AccountHelper.getAccount(this),"ng.codehaven.eko.notifications")){
+                    ContentResolver.setIsSyncable(AccountHelper.getAccount(this),"ng.codehaven.eko.notifications",1);
+                    ContentResolver.setSyncAutomatically(AccountHelper.getAccount(this),"ng.codehaven.eko.notifications", true);
+
+                    ContentResolver.addPeriodicSync(AccountHelper.getAccount(this),"ng.codehaven.eko.notifications",new Bundle(),SYNC_INTERVAL);
+                }
+                // Hide Splash with shared pref
+                SharedPreferences isSplashSeen = getSharedPreferences(Constants.ACCOUNT_TYPE, 0);
+
+                Editor editor = isSplashSeen.edit();
+
+                editor.putBoolean("seen", true);
+
+                editor.apply();
+
+
                 fullname = mCurrentUser.getString("full_name");
                 email = mCurrentUser.getEmail();
                 hash = MD5Util.md5Hex(email);
@@ -140,7 +177,7 @@ public class HomeActivity extends BaseToolbarActivity implements
                 break;
             case R.id.action_signOut:
                 if (mCurrentUser.isAuthenticated()) {
-                    IntentUtils.logout(HomeActivity.this);
+                    IntentUtils.logout(HomeActivity.this, this);
                     finish();
                 }
                 break;
@@ -325,24 +362,15 @@ public class HomeActivity extends BaseToolbarActivity implements
 
     private void doPersonal(String qrData) {
         String[] secondSplit = QRCodeHelper.getSecondSplitArray(qrData);
-//        Logger.s(HomeActivity.this, qrData);
-//        Logger.m(qrData);
-//        Logger.m(String.valueOf(secondSplit.length)+" "+secondSplit[0]+" "+secondSplit[1]+ " "+secondSplit[2]);
-//        if (secondSplit.length < 1) {
-//            //Split invalid show error
-//            Logger.m(secondSplit[0]);
-//        } else {
-//            switch (secondSplit[2]) {
-//                case "contact":
-//                    // DO contact action
-//                    Logger.m("doing contact");
-//                    break;
-//                case "transfer":
-//                    // Do transfer
-//                    initTransfer(secondSplit);
-//                    break;
-//            }
-//        }
+        Logger.m(String.valueOf(secondSplit.length)+" "+secondSplit[0]+" "+secondSplit[1]);
+        switch (secondSplit.length){
+            case 2:
+                Intent i = new Intent(HomeActivity.this, SendFundActivity.class);
+                i.setAction("ng.codehaven.eko.TRANSFER");
+                i.putExtra("username", secondSplit[1]);
+                startActivity(i);
+                break;
+        }
     }
 
     private void initTransfer(final String[] secondSplit) {
@@ -399,5 +427,26 @@ public class HomeActivity extends BaseToolbarActivity implements
             isBalanceSufficient[0] = false;
         }
         return isBalanceSufficient[0];
+    }
+
+    private void getTokenForAccountCreateIfNeeded(String accountType, String authTokenType) {
+        final AccountManagerFuture<Bundle> future = mAccountManager.getAuthTokenByFeatures(accountType, authTokenType, null, this, null, null,
+                new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        Bundle bnd = null;
+                        try {
+                            bnd = future.getResult();
+                            final String authtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+//                            showMessage(((authtoken != null) ? "SUCCESS!\ntoken: " + authtoken : "FAIL"));
+//                            Log.d("udinic", "GetTokenForAccount Bundle is " + bnd);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+//                            showMessage(e.getMessage());
+                        }
+                    }
+                }
+                , null);
     }
 }

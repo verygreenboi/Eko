@@ -12,8 +12,6 @@ import android.widget.Button;
 import net.sourceforge.zbar.ImageScanner;
 
 import ng.codehaven.eko.R;
-import ng.codehaven.eko.ui.activities.LoginActivity;
-import ng.codehaven.eko.utils.IntentUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,11 +75,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         if (v.getId() == R.id.ScanButton){
             handler.doScan(v);
         }else if (v.getId() == R.id.LoginButton){
-            IntentUtils.startActivity(getActivity(), LoginActivity.class);
+            handler.doLogin(v);
+//            IntentUtils.startActivity(getActivity(), AuthenticatorActivity.class);
         }
     }
 
     public interface DoScanQR{
         public void doScan(View v);
+        public void doLogin(View v);
     }
 }

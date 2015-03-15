@@ -187,5 +187,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_authenticator">AuthenticatorActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="login_error_txt">Login failed. Check your email and password.</string>
+    <string name="title_activity_send_fund">SendFundActivity</string>
 
 </resources>

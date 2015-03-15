@@ -68,7 +68,7 @@
 
     <Button
         android:id="@+id/LoginButton"
-        android:text="Signup"
+        android:text="Login"
         android:textColor="@color/colorPrimary"
         android:background="@drawable/buttonshape"
         android:layout_width="270dp"
@@ -84,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/LoginButton"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:textColor="@color/colorPrimary"
         android:text="Don't have an account?"
         android:layout_centerHorizontal="true"
         />
@@ -93,9 +94,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/haveAccount"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorPrimary"
-        android:text="Signup"
+        android:text="Sign up"
         />
 </RelativeLayout>

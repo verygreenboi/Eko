@@ -164,9 +164,11 @@
 
             <Button
                 android:id="@+id/registerBtn"
-                style="?android:buttonBarButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:background="@drawable/buttonshape"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="270dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/register_btn_txt"
                 android:textAllCaps="true" />
 
@@ -176,6 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="Already have an account?"
+                android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
                 />
 
@@ -186,6 +189,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/colorPrimary"
+                android:layout_marginBottom="?attr/actionBarSize"
                 android:text="Sign In"
                 />
 

@@ -47,7 +47,7 @@ public class HistoryItemsAdapter extends RecyclerView.Adapter<HistoryItemsAdapte
         this.ctx = context;
         setHasStableIds(true);
         this.isEmpty = transactions.isEmpty();
-        this.imageLoader = ImageCacheManager.getInstance().getImageLoader();
+            this.imageLoader = ImageCacheManager.getInstance().getImageLoader();
     }
 
     @Override

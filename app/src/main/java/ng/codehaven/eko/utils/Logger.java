@@ -13,6 +13,10 @@ public class Logger {
         Log.d("EKO-log", message);
     }
 
+    public static void e(String message){
+        Log.e("EKO-log", message);
+    }
+
     public static void s(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }

@@ -1,6 +1,10 @@
 package ng.codehaven.eko.ui.activities;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,13 +23,14 @@ import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ng.codehaven.eko.Constants;
 import ng.codehaven.eko.R;
+import ng.codehaven.eko.helpers.AccountHelper;
 import ng.codehaven.eko.ui.fragments.IntroAFragment;
 import ng.codehaven.eko.ui.fragments.IntroBFragment;
 import ng.codehaven.eko.ui.fragments.IntroCFragment;
 import ng.codehaven.eko.ui.fragments.LoginFragment;
 import ng.codehaven.eko.utils.IntentUtils;
-import ng.codehaven.eko.utils.Logger;
 import ng.codehaven.eko.utils.UIUtils;
 
 public class AuthActivity extends ActionBarActivity implements LoginFragment.DoScanQR {
@@ -38,11 +43,15 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
     protected ImageView mLoadingBg2;
     @InjectView(R.id.logo)
     protected ImageView mLogo;
-    @InjectView(R.id.img_bg_slide_3) protected ImageView mBottomImage;
+    @InjectView(R.id.img_bg_slide_3)
+    protected ImageView mBottomImage;
 
     int mCurrentPage = 1;
     float x;
     float initX;
+
+    private AccountManager mAccountManager;
+    ContentResolver mResolver;
 
 
     AccelerateDecelerateInterpolator sInterpolator = new AccelerateDecelerateInterpolator();
@@ -51,6 +60,11 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+
+        mAccountManager = AccountManager.get(this);
+        // Get the content resolver for your app
+        mResolver = getContentResolver();
+
         ButterKnife.inject(this);
         mLoadingBg2.setAlpha(0f);
         mBottomImage.setAlpha(0f);
@@ -62,7 +76,6 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
 
             @Override
             public void onPageScrolled(int i, float v, int i2) {
-                Logger.m("Position --> " + String.valueOf(i) + " Position offset --> " + String.valueOf(v) + " Position Offset Pixels --> " + String.valueOf(i2));
                 if (i == 0) {
                     mLoadingBg2.setAlpha(v);
                 }
@@ -70,11 +83,11 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
                     mLoadingBg2.setAlpha(1 - v);
                     mLogo.setTranslationX(1 - v);
                 }
-                if (i== 1){
+                if (i == 1) {
                     mBottomImage.setAlpha(v);
                 }
-                if (i == 2 && i2 > 0){
-                    mBottomImage.setAlpha(1-v);
+                if (i == 2 && i2 > 0) {
+                    mBottomImage.setAlpha(1 - v);
                 }
             }
 
@@ -84,8 +97,8 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
                 switch (i) {
                     case 0:
                         mCurrentPage = 1;
-                        if (mLogo.getX() > 55){
-                            TranslateAnimation ta = new TranslateAnimation(180, 0 , 0, 0);
+                        if (mLogo.getX() > 55) {
+                            TranslateAnimation ta = new TranslateAnimation(180, 0, 0, 0);
                             ta.setDuration(500);
                             ta.setInterpolator(sInterpolator);
                             ta.setFillAfter(true);
@@ -136,6 +149,15 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (AccountHelper.hasAccount(this)) {
+            IntentUtils.startActivity(this, HomeActivity.class);
+            finish();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_auth, menu);
@@ -164,6 +186,34 @@ public class AuthActivity extends ActionBarActivity implements LoginFragment.DoS
             i.putExtra("SCAN_MODE", "QR_CODE_MODE");
             startActivityForResult(i, 2204);
         }
+    }
+
+    @Override
+    public void doLogin(View v) {
+        if (v.getId() == R.id.LoginButton) {
+            getTokenForAccountCreateIfNeeded(Constants.ACCOUNT_TYPE, Constants.AUTHTOKEN_TYPE_FULL_ACCESS);
+        }
+    }
+
+    private void getTokenForAccountCreateIfNeeded(String accountType, String authTokenType) {
+        final AccountManagerFuture<Bundle> future = mAccountManager.getAuthTokenByFeatures(accountType, authTokenType, null, this, null, null,
+                new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        Bundle bnd = null;
+                        try {
+                            bnd = future.getResult();
+                            final String authtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+//                            showMessage(((authtoken != null) ? "SUCCESS!\ntoken: " + authtoken : "FAIL"));
+//                            Log.d("udinic", "GetTokenForAccount Bundle is " + bnd);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+//                            showMessage(e.getMessage());
+                        }
+                    }
+                }
+                , null);
     }
 
     @Override

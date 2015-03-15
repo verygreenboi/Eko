@@ -55,9 +55,11 @@
         <Button
             android:id="@+id/sendBtn"
             android:layout_marginTop="8dp"
-            android:background="@drawable/flat_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/buttonshape"
+            android:layout_width="270dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
             android:textAllCaps="true"
             android:text="@string/send_txt" />
     </LinearLayout>

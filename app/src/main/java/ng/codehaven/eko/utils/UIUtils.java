@@ -3,11 +3,13 @@ package ng.codehaven.eko.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.WindowManager;
 
 import ng.codehaven.eko.BuildType;
 import ng.codehaven.eko.Constants;
+import ng.codehaven.eko.R;
 
 /**
  * Created by Thompson on 16/01/2015.
@@ -113,6 +115,57 @@ public class UIUtils {
       /* We don't test if the UTF-8 encoding is well-formed */
         }
         return sbuf.toString() ;
+    }
+
+    public static String GetCountryZipCode(Context c){
+        String CountryID="";
+        String CountryZipCode="";
+
+        TelephonyManager manager = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        String[] rl= c.getResources().getStringArray(R.array.CountryCodes);
+        for (String aRl : rl) {
+            String[] g = aRl.split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
+    }
+
+    public static String getCountryIso(Context c){
+        TelephonyManager manager = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        return manager.getSimCountryIso().toUpperCase();
+    }
+
+    public boolean isValidNumber(String number){
+        boolean isLengthValid = isValidLength(number);
+        return false;
+    }
+
+    private boolean isValidLength(String number){
+        boolean isLocal = isLocal(number);
+        boolean isNational;
+        boolean isInternational;
+
+        return false;
+    }
+
+    private boolean isLocal(String number){
+        return number.length() == 7;
+    }
+
+    private boolean isNational (String number){
+        if (number.length() == 9){
+            String split = number.substring(0, Math.min(number.length(), 2));
+            if (!split.isEmpty()){
+
+            }
+        }
+        return false;
     }
 
 }

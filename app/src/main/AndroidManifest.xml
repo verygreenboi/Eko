@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -25,7 +26,7 @@
 
     <application
         android:name=".Application"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -102,7 +103,7 @@
             android:name=".ui.activities.RequestFundsActivity"
             android:label="@string/title_activity_request_funds"
             android:parentActivityName=".ui.activities.HomeActivity"
-            android:theme="@style/requestFundsActivity" >
+            android:theme="@style/regActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ng.codehaven.eko.ui.activities.HomeActivity" />
@@ -111,7 +112,7 @@
             android:name=".ui.activities.CashInActivity"
             android:label="@string/title_activity_cash_in"
             android:parentActivityName=".ui.activities.HomeActivity"
-            android:theme="@style/cashInActivity" >
+            android:theme="@style/regActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ng.codehaven.eko.ui.activities.HomeActivity" />
@@ -205,7 +206,8 @@
         <activity
             android:name=".ui.activities.ServiceAction"
             android:label="@string/title_activity_service_action"
-            android:parentActivityName=".ui.activities.HomeActivity" >
+            android:parentActivityName=".ui.activities.HomeActivity"
+            android:theme="@style/regActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ng.codehaven.eko.ui.activities.HomeActivity" />
@@ -240,7 +242,8 @@
         <activity
             android:name=".ui.activities.EnterNewBusinessActivity"
             android:label="@string/title_activity_enter_new_business"
-            android:parentActivityName=".ui.activities.BusinessActivity" >
+            android:parentActivityName=".ui.activities.BusinessActivity"
+            android:theme="@style/regActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ng.codehaven.eko.ui.activities.BusinessActivity" />
@@ -282,11 +285,41 @@
 
         <activity
             android:name=".ui.activities.authentication.AuthenticatorActivity"
-            android:label="@string/title_activity_authenticator" >
+            android:label="@string/title_activity_authenticator"
+            android:parentActivityName=".ui.activities.HomeActivity"
+            android:theme="@style/regActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ng.codehaven.eko.ui.activities.HomeActivity" />
+ >
         </activity>
         <activity
             android:name=".ui.activities.authentication.SignUpActivity"
-            android:label="@string/title_activity_sign_up" >
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/regActivity" >
+        </activity>
+
+        <provider
+            android:name=".providers.EmptyContentProvider"
+            android:authorities="ng.codehaven.eko.notifications"
+            android:enabled="false"
+            android:exported="true" >
+        </provider>
+
+        <activity
+            android:name=".ui.activities.SendFundActivity"
+            android:label="@string/title_activity_send_fund"
+            android:parentActivityName=".ui.activities.HomeActivity"
+            android:theme="@style/regActivity" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.ng.codehaven.eko.profile" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ng.codehaven.eko.ui.activities.HomeActivity" />
         </activity>
     </application>
 
